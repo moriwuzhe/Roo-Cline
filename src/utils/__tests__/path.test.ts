@@ -1,19 +1,23 @@
-import { arePathsEqual, getReadablePath } from "../path"
-import * as path from "path"
-import os from "os"
+import { arePathsEqual, getReadablePath } from "../path" // 导入 arePathsEqual 和 getReadablePath 函数
+import * as path from "path" // 导入 path 模块
+import os from "os" // 导入 os 模块
 
 describe("Path Utilities", () => {
-	const originalPlatform = process.platform
+	// 描述 "Path Utilities" 测试套件
+	const originalPlatform = process.platform // 存储原始平台
 
 	afterEach(() => {
+		// 在每个测试之后执行
 		Object.defineProperty(process, "platform", {
-			value: originalPlatform,
+			value: originalPlatform, // 恢复原始平台
 		})
 	})
 
 	describe("String.prototype.toPosix", () => {
+		// 描述 "String.prototype.toPosix" 测试套件
 		it("should convert backslashes to forward slashes", () => {
-			const windowsPath = "C:\\Users\\test\\file.txt"
+			// 测试是否将反斜杠转换为正斜杠
+			const windowsPath = "C:\\Users\\test\\file.txt" // 定义 Windows 路径
 			expect(windowsPath.toPosix()).toBe("C:/Users/test/file.txt")
 		})
 
@@ -41,14 +45,14 @@ describe("Path Utilities", () => {
 			})
 
 			it("should handle different path separators", () => {
-				// Convert both paths to use forward slashes after normalization
+				// 将两个路径都转换为使用正斜杠
 				const path1 = path.normalize("C:\\Users\\Test").replace(/\\/g, "/")
 				const path2 = path.normalize("C:/Users/Test").replace(/\\/g, "/")
 				expect(arePathsEqual(path1, path2)).toBe(true)
 			})
 
 			it("should normalize paths with ../", () => {
-				// Convert both paths to use forward slashes after normalization
+				// 将两个路径都转换为使用正斜杠
 				const path1 = path.normalize("C:\\Users\\Test\\..\\Test").replace(/\\/g, "/")
 				const path2 = path.normalize("C:\\Users\\Test").replace(/\\/g, "/")
 				expect(arePathsEqual(path1, path2)).toBe(true)

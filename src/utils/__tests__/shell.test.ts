@@ -1,14 +1,15 @@
-import * as vscode from "vscode"
-import { userInfo } from "os"
-import { getShell } from "../shell"
+import * as vscode from "vscode" // 导入 vscode 模块
+import { userInfo } from "os" // 导入 os 模块中的 userInfo 函数
+import { getShell } from "../shell" // 导入 getShell 函数
 
 describe("Shell Detection Tests", () => {
-	let originalPlatform: string
-	let originalEnv: NodeJS.ProcessEnv
-	let originalGetConfig: any
-	let originalUserInfo: any
+	// 描述 "Shell Detection Tests" 测试套件
+	let originalPlatform: string // 定义变量 originalPlatform
+	let originalEnv: NodeJS.ProcessEnv // 定义变量 originalEnv
+	let originalGetConfig: any // 定义变量 originalGetConfig
+	let originalUserInfo: any // 定义变量 originalUserInfo
 
-	// Helper to mock VS Code configuration
+	// 辅助函数，用于模拟 VS Code 配置
 	function mockVsCodeConfig(platformKey: string, defaultProfileName: string | null, profiles: Record<string, any>) {
 		vscode.workspace.getConfiguration = () =>
 			({
@@ -25,22 +26,24 @@ describe("Shell Detection Tests", () => {
 	}
 
 	beforeEach(() => {
-		// Store original references
+		// 在每个测试之前执行
+		// 存储原始引用
 		originalPlatform = process.platform
 		originalEnv = { ...process.env }
 		originalGetConfig = vscode.workspace.getConfiguration
 		originalUserInfo = userInfo
 
-		// Clear environment variables for a clean test
+		// 清除环境变量以进行干净的测试
 		delete process.env.SHELL
 		delete process.env.COMSPEC
 
-		// Default userInfo() mock
+		// 默认的 userInfo() 模拟
 		;(userInfo as any) = () => ({ shell: null })
 	})
 
 	afterEach(() => {
-		// Restore everything
+		// 在每个测试之后执行
+		// 恢复所有内容
 		Object.defineProperty(process, "platform", { value: originalPlatform })
 		process.env = originalEnv
 		vscode.workspace.getConfiguration = originalGetConfig
@@ -48,7 +51,7 @@ describe("Shell Detection Tests", () => {
 	})
 
 	// --------------------------------------------------------------------------
-	// Windows Shell Detection
+	// Windows Shell 检测
 	// --------------------------------------------------------------------------
 	describe("Windows Shell Detection", () => {
 		beforeEach(() => {
@@ -98,7 +101,7 @@ describe("Shell Detection Tests", () => {
 		})
 
 		it("handles undefined profile gracefully", () => {
-			// Mock a case where defaultProfileName exists but the profile doesn't
+			// 模拟一种情况，其中 defaultProfileName 存在但配置文件不存在
 			mockVsCodeConfig("windows", "NonexistentProfile", {})
 			expect(getShell()).toBe("C:\\Windows\\System32\\cmd.exe")
 		})
@@ -119,7 +122,7 @@ describe("Shell Detection Tests", () => {
 	})
 
 	// --------------------------------------------------------------------------
-	// macOS Shell Detection
+	// macOS Shell 检测
 	// --------------------------------------------------------------------------
 	describe("macOS Shell Detection", () => {
 		beforeEach(() => {
@@ -152,7 +155,7 @@ describe("Shell Detection Tests", () => {
 	})
 
 	// --------------------------------------------------------------------------
-	// Linux Shell Detection
+	// Linux Shell 检测
 	// --------------------------------------------------------------------------
 	describe("Linux Shell Detection", () => {
 		beforeEach(() => {
@@ -185,7 +188,7 @@ describe("Shell Detection Tests", () => {
 	})
 
 	// --------------------------------------------------------------------------
-	// Unknown Platform & Error Handling
+	// 未知平台和错误处理
 	// --------------------------------------------------------------------------
 	describe("Unknown Platform / Error Handling", () => {
 		it("falls back to /bin/sh for unknown platforms", () => {

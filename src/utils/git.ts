@@ -1,21 +1,21 @@
-import { exec } from "child_process"
-import { promisify } from "util"
-import { truncateOutput } from "../integrations/misc/extract-text"
+import { exec } from "child_process" // 导入 child_process 模块中的 exec 函数
+import { promisify } from "util" // 导入 util 模块中的 promisify 函数
+import { truncateOutput } from "../integrations/misc/extract-text" // 导入 truncateOutput 函数
 
-const execAsync = promisify(exec)
-const GIT_OUTPUT_LINE_LIMIT = 500
+const execAsync = promisify(exec) // 将 exec 函数转换为返回 Promise 的异步函数
+const GIT_OUTPUT_LINE_LIMIT = 500 // Git 输出行数限制
 
 export interface GitCommit {
-	hash: string
-	shortHash: string
-	subject: string
-	author: string
-	date: string
+	hash: string // 提交哈希
+	shortHash: string // 短哈希
+	subject: string // 提交主题
+	author: string // 提交作者
+	date: string // 提交日期
 }
 
 async function checkGitRepo(cwd: string): Promise<boolean> {
 	try {
-		await execAsync("git rev-parse --git-dir", { cwd })
+		await execAsync("git rev-parse --git-dir", { cwd }) // 检查是否为 Git 仓库
 		return true
 	} catch (error) {
 		return false
@@ -24,7 +24,7 @@ async function checkGitRepo(cwd: string): Promise<boolean> {
 
 async function checkGitInstalled(): Promise<boolean> {
 	try {
-		await execAsync("git --version")
+		await execAsync("git --version") // 检查是否安装了 Git
 		return true
 	} catch (error) {
 		return false
@@ -33,19 +33,19 @@ async function checkGitInstalled(): Promise<boolean> {
 
 export async function searchCommits(query: string, cwd: string): Promise<GitCommit[]> {
 	try {
-		const isInstalled = await checkGitInstalled()
+		const isInstalled = await checkGitInstalled() // 检查是否安装了 Git
 		if (!isInstalled) {
 			console.error("Git is not installed")
 			return []
 		}
 
-		const isRepo = await checkGitRepo(cwd)
+		const isRepo = await checkGitRepo(cwd) // 检查是否为 Git 仓库
 		if (!isRepo) {
 			console.error("Not a git repository")
 			return []
 		}
 
-		// Search commits by hash or message, limiting to 10 results
+		// 通过哈希或消息搜索提交，限制为 10 个结果
 		const { stdout } = await execAsync(
 			`git log -n 10 --format="%H%n%h%n%s%n%an%n%ad" --date=short ` + `--grep="${query}" --regexp-ignore-case`,
 			{ cwd },
@@ -53,7 +53,7 @@ export async function searchCommits(query: string, cwd: string): Promise<GitComm
 
 		let output = stdout
 		if (!output.trim() && /^[a-f0-9]+$/i.test(query)) {
-			// If no results from grep search and query looks like a hash, try searching by hash
+			// 如果 grep 搜索没有结果且查询看起来像哈希，则尝试通过哈希搜索
 			const { stdout: hashStdout } = await execAsync(
 				`git log -n 10 --format="%H%n%h%n%s%n%an%n%ad" --date=short ` + `--author-date-order ${query}`,
 				{ cwd },
@@ -91,17 +91,17 @@ export async function searchCommits(query: string, cwd: string): Promise<GitComm
 
 export async function getCommitInfo(hash: string, cwd: string): Promise<string> {
 	try {
-		const isInstalled = await checkGitInstalled()
+		const isInstalled = await checkGitInstalled() // 检查是否安装了 Git
 		if (!isInstalled) {
 			return "Git is not installed"
 		}
 
-		const isRepo = await checkGitRepo(cwd)
+		const isRepo = await checkGitRepo(cwd) // 检查是否为 Git 仓库
 		if (!isRepo) {
 			return "Not a git repository"
 		}
 
-		// Get commit info, stats, and diff separately
+		// 分别获取提交信息、统计信息和差异
 		const { stdout: info } = await execAsync(`git show --format="%H%n%h%n%s%n%an%n%ad%n%b" --no-patch ${hash}`, {
 			cwd,
 		})
@@ -132,23 +132,23 @@ export async function getCommitInfo(hash: string, cwd: string): Promise<string> 
 
 export async function getWorkingState(cwd: string): Promise<string> {
 	try {
-		const isInstalled = await checkGitInstalled()
+		const isInstalled = await checkGitInstalled() // 检查是否安装了 Git
 		if (!isInstalled) {
 			return "Git is not installed"
 		}
 
-		const isRepo = await checkGitRepo(cwd)
+		const isRepo = await checkGitRepo(cwd) // 检查是否为 Git 仓库
 		if (!isRepo) {
 			return "Not a git repository"
 		}
 
-		// Get status of working directory
+		// 获取工作目录的状态
 		const { stdout: status } = await execAsync("git status --short", { cwd })
 		if (!status.trim()) {
 			return "No changes in working directory"
 		}
 
-		// Get all changes (both staged and unstaged) compared to HEAD
+		// 获取与 HEAD 比较的所有更改（包括已暂存和未暂存的更改）
 		const { stdout: diff } = await execAsync("git diff HEAD", { cwd })
 		const lineLimit = GIT_OUTPUT_LINE_LIMIT
 		const output = `Working directory changes:\n\n${status}\n\n${diff}`.trim()

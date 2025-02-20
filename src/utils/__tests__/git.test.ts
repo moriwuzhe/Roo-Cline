@@ -1,25 +1,26 @@
-import { jest } from "@jest/globals"
-import { searchCommits, getCommitInfo, getWorkingState, GitCommit } from "../git"
-import { ExecException } from "child_process"
+import { jest } from "@jest/globals" // 导入 jest
+import { searchCommits, getCommitInfo, getWorkingState, GitCommit } from "../git" // 导入 git 模块中的函数和类型
+import { ExecException } from "child_process" // 导入 ExecException 类型
 
 type ExecFunction = (
+	// 定义 ExecFunction 类型
 	command: string,
 	options: { cwd?: string },
 	callback: (error: ExecException | null, result?: { stdout: string; stderr: string }) => void,
 ) => void
 
-type PromisifiedExec = (command: string, options?: { cwd?: string }) => Promise<{ stdout: string; stderr: string }>
+type PromisifiedExec = (command: string, options?: { cwd?: string }) => Promise<{ stdout: string; stderr: string }> // 定义 PromisifiedExec 类型
 
-// Mock child_process.exec
+// 模拟 child_process.exec
 jest.mock("child_process", () => ({
 	exec: jest.fn(),
 }))
 
-// Mock util.promisify to return our own mock function
+// 模拟 util.promisify 以返回我们自己的模拟函数
 jest.mock("util", () => ({
 	promisify: jest.fn((fn: ExecFunction): PromisifiedExec => {
 		return async (command: string, options?: { cwd?: string }) => {
-			// Call the original mock to maintain the mock implementation
+			// 调用原始模拟以保持模拟实现
 			return new Promise((resolve, reject) => {
 				fn(
 					command,
@@ -37,22 +38,25 @@ jest.mock("util", () => ({
 	}),
 }))
 
-// Mock extract-text
+// 模拟 extract-text
 jest.mock("../../integrations/misc/extract-text", () => ({
 	truncateOutput: jest.fn((text) => text),
 }))
 
 describe("git utils", () => {
-	// Get the mock with proper typing
+	// 描述 "git utils" 测试套件
+	// 获取具有正确类型的模拟
 	const { exec } = jest.requireMock("child_process") as { exec: jest.MockedFunction<ExecFunction> }
-	const cwd = "/test/path"
+	const cwd = "/test/path" // 定义当前工作目录
 
 	beforeEach(() => {
-		jest.clearAllMocks()
+		jest.clearAllMocks() // 清除所有模拟
 	})
 
 	describe("searchCommits", () => {
+		// 描述 "searchCommits" 测试套件
 		const mockCommitData = [
+			// 模拟提交数据
 			"abc123def456",
 			"abc123",
 			"fix: test commit",
@@ -66,7 +70,8 @@ describe("git utils", () => {
 		].join("\n")
 
 		it("should return commits when git is installed and repo exists", async () => {
-			// Set up mock responses
+			// 测试在安装 git 并存在仓库时是否返回提交
+			// 设置模拟响应
 			const responses = new Map([
 				["git --version", { stdout: "git version 2.39.2", stderr: "" }],
 				["git rev-parse --git-dir", { stdout: ".git", stderr: "" }],
@@ -77,7 +82,7 @@ describe("git utils", () => {
 			])
 
 			exec.mockImplementation((command: string, options: { cwd?: string }, callback: Function) => {
-				// Find matching response
+				// 查找匹配的响应
 				for (const [cmd, response] of responses) {
 					if (command === cmd) {
 						callback(null, response)
@@ -87,9 +92,9 @@ describe("git utils", () => {
 				callback(new Error(`Unexpected command: ${command}`))
 			})
 
-			const result = await searchCommits("test", cwd)
+			const result = await searchCommits("test", cwd) // 搜索提交
 
-			// First verify the result is correct
+			// 首先验证结果是否正确
 			expect(result).toHaveLength(2)
 			expect(result[0]).toEqual({
 				hash: "abc123def456",
@@ -99,7 +104,7 @@ describe("git utils", () => {
 				date: "2024-01-06",
 			})
 
-			// Then verify all commands were called correctly
+			// 然后验证所有命令是否正确调用
 			expect(exec).toHaveBeenCalledWith("git --version", {}, expect.any(Function))
 			expect(exec).toHaveBeenCalledWith("git rev-parse --git-dir", { cwd }, expect.any(Function))
 			expect(exec).toHaveBeenCalledWith(
@@ -110,6 +115,7 @@ describe("git utils", () => {
 		})
 
 		it("should return empty array when git is not installed", async () => {
+			// 测试在未安装 git 时是否返回空数组
 			exec.mockImplementation((command: string, options: { cwd?: string }, callback: Function) => {
 				if (command === "git --version") {
 					callback(new Error("git not found"))
@@ -118,15 +124,16 @@ describe("git utils", () => {
 				callback(new Error("Unexpected command"))
 			})
 
-			const result = await searchCommits("test", cwd)
-			expect(result).toEqual([])
+			const result = await searchCommits("test", cwd) // 搜索提交
+			expect(result).toEqual([]) // 断言结果是否为空数组
 			expect(exec).toHaveBeenCalledWith("git --version", {}, expect.any(Function))
 		})
 
 		it("should return empty array when not in a git repository", async () => {
+			// 测试在不在 git 仓库中时是否返回空数组
 			const responses = new Map([
 				["git --version", { stdout: "git version 2.39.2", stderr: "" }],
-				["git rev-parse --git-dir", null], // null indicates error should be called
+				["git rev-parse --git-dir", null], // null 表示应调用错误
 			])
 
 			exec.mockImplementation((command: string, options: { cwd?: string }, callback: Function) => {
@@ -140,13 +147,14 @@ describe("git utils", () => {
 				}
 			})
 
-			const result = await searchCommits("test", cwd)
-			expect(result).toEqual([])
+			const result = await searchCommits("test", cwd) // 搜索提交
+			expect(result).toEqual([]) // 断言结果是否为空数组
 			expect(exec).toHaveBeenCalledWith("git --version", {}, expect.any(Function))
 			expect(exec).toHaveBeenCalledWith("git rev-parse --git-dir", { cwd }, expect.any(Function))
 		})
 
 		it("should handle hash search when grep search returns no results", async () => {
+			// 测试在 grep 搜索返回无结果时是否处理哈希搜索
 			const responses = new Map([
 				["git --version", { stdout: "git version 2.39.2", stderr: "" }],
 				["git rev-parse --git-dir", { stdout: ".git", stderr: "" }],
@@ -170,8 +178,8 @@ describe("git utils", () => {
 				callback(new Error("Unexpected command"))
 			})
 
-			const result = await searchCommits("abc123", cwd)
-			expect(result).toHaveLength(2)
+			const result = await searchCommits("abc123", cwd) // 搜索提交
+			expect(result).toHaveLength(2) // 断言结果长度是否为 2
 			expect(result[0]).toEqual({
 				hash: "abc123def456",
 				shortHash: "abc123",
@@ -183,7 +191,9 @@ describe("git utils", () => {
 	})
 
 	describe("getCommitInfo", () => {
+		// 描述 "getCommitInfo" 测试套件
 		const mockCommitInfo = [
+			// 模拟提交信息
 			"abc123def456",
 			"abc123",
 			"fix: test commit",
@@ -191,10 +201,11 @@ describe("git utils", () => {
 			"2024-01-06",
 			"Detailed description",
 		].join("\n")
-		const mockStats = "1 file changed, 2 insertions(+), 1 deletion(-)"
-		const mockDiff = "@@ -1,1 +1,2 @@\n-old line\n+new line"
+		const mockStats = "1 file changed, 2 insertions(+), 1 deletion(-)" // 模拟统计信息
+		const mockDiff = "@@ -1,1 +1,2 @@\n-old line\n+new line" // 模拟差异信息
 
 		it("should return formatted commit info", async () => {
+			// 测试是否返回格式化的提交信息
 			const responses = new Map([
 				["git --version", { stdout: "git version 2.39.2", stderr: "" }],
 				["git rev-parse --git-dir", { stdout: ".git", stderr: "" }],
@@ -216,14 +227,15 @@ describe("git utils", () => {
 				callback(new Error("Unexpected command"))
 			})
 
-			const result = await getCommitInfo("abc123", cwd)
-			expect(result).toContain("Commit: abc123")
-			expect(result).toContain("Author: John Doe")
-			expect(result).toContain("Files Changed:")
-			expect(result).toContain("Full Changes:")
+			const result = await getCommitInfo("abc123", cwd) // 获取提交信息
+			expect(result).toContain("Commit: abc123") // 断言结果是否包含提交信息
+			expect(result).toContain("Author: John Doe") // 断言结果是否包含作者信息
+			expect(result).toContain("Files Changed:") // 断言结果是否包含文件更改信息
+			expect(result).toContain("Full Changes:") // 断言结果是否包含完整更改信息
 		})
 
 		it("should return error message when git is not installed", async () => {
+			// 测试在未安装 git 时是否返回错误信息
 			exec.mockImplementation((command: string, options: { cwd?: string }, callback: Function) => {
 				if (command === "git --version") {
 					callback(new Error("git not found"))
@@ -232,14 +244,15 @@ describe("git utils", () => {
 				callback(new Error("Unexpected command"))
 			})
 
-			const result = await getCommitInfo("abc123", cwd)
-			expect(result).toBe("Git is not installed")
+			const result = await getCommitInfo("abc123", cwd) // 获取提交信息
+			expect(result).toBe("Git is not installed") // 断言结果是否为 "Git is not installed"
 		})
 
 		it("should return error message when not in a git repository", async () => {
+			// 测试在不在 git 仓库中时是否返回错误信息
 			const responses = new Map([
 				["git --version", { stdout: "git version 2.39.2", stderr: "" }],
-				["git rev-parse --git-dir", null], // null indicates error should be called
+				["git rev-parse --git-dir", null], // null 表示应调用错误
 			])
 
 			exec.mockImplementation((command: string, options: { cwd?: string }, callback: Function) => {
@@ -253,16 +266,18 @@ describe("git utils", () => {
 				}
 			})
 
-			const result = await getCommitInfo("abc123", cwd)
-			expect(result).toBe("Not a git repository")
+			const result = await getCommitInfo("abc123", cwd) // 获取提交信息
+			expect(result).toBe("Not a git repository") // 断言结果是否为 "Not a git repository"
 		})
 	})
 
 	describe("getWorkingState", () => {
-		const mockStatus = " M src/file1.ts\n?? src/file2.ts"
-		const mockDiff = "@@ -1,1 +1,2 @@\n-old line\n+new line"
+		// 描述 "getWorkingState" 测试套件
+		const mockStatus = " M src/file1.ts\n?? src/file2.ts" // 模拟状态信息
+		const mockDiff = "@@ -1,1 +1,2 @@\n-old line\n+new line" // 模拟差异信息
 
 		it("should return working directory changes", async () => {
+			// 测试是否返回工作目录更改
 			const responses = new Map([
 				["git --version", { stdout: "git version 2.39.2", stderr: "" }],
 				["git rev-parse --git-dir", { stdout: ".git", stderr: "" }],
@@ -280,13 +295,14 @@ describe("git utils", () => {
 				callback(new Error("Unexpected command"))
 			})
 
-			const result = await getWorkingState(cwd)
-			expect(result).toContain("Working directory changes:")
-			expect(result).toContain("src/file1.ts")
-			expect(result).toContain("src/file2.ts")
+			const result = await getWorkingState(cwd) // 获取工作状态
+			expect(result).toContain("Working directory changes:") // 断言结果是否包含工作目录更改信息
+			expect(result).toContain("src/file1.ts") // 断言结果是否包含文件1信息
+			expect(result).toContain("src/file2.ts") // 断言结果是否包含文件2信息
 		})
 
 		it("should return message when working directory is clean", async () => {
+			// 测试在工作目录干净时是否返回消息
 			const responses = new Map([
 				["git --version", { stdout: "git version 2.39.2", stderr: "" }],
 				["git rev-parse --git-dir", { stdout: ".git", stderr: "" }],
@@ -303,11 +319,12 @@ describe("git utils", () => {
 				callback(new Error("Unexpected command"))
 			})
 
-			const result = await getWorkingState(cwd)
-			expect(result).toBe("No changes in working directory")
+			const result = await getWorkingState(cwd) // 获取工作状态
+			expect(result).toBe("No changes in working directory") // 断言结果是否为 "No changes in working directory"
 		})
 
 		it("should return error message when git is not installed", async () => {
+			// 测试在未安装 git 时是否返回错误信息
 			exec.mockImplementation((command: string, options: { cwd?: string }, callback: Function) => {
 				if (command === "git --version") {
 					callback(new Error("git not found"))
@@ -316,14 +333,15 @@ describe("git utils", () => {
 				callback(new Error("Unexpected command"))
 			})
 
-			const result = await getWorkingState(cwd)
-			expect(result).toBe("Git is not installed")
+			const result = await getWorkingState(cwd) // 获取工作状态
+			expect(result).toBe("Git is not installed") // 断言结果是否为 "Git is not installed"
 		})
 
 		it("should return error message when not in a git repository", async () => {
+			// 测试在不在 git 仓库中时是否返回错误信息
 			const responses = new Map([
 				["git --version", { stdout: "git version 2.39.2", stderr: "" }],
-				["git rev-parse --git-dir", null], // null indicates error should be called
+				["git rev-parse --git-dir", null], // null 表示应调用错误
 			])
 
 			exec.mockImplementation((command: string, options: { cwd?: string }, callback: Function) => {
@@ -337,8 +355,8 @@ describe("git utils", () => {
 				}
 			})
 
-			const result = await getWorkingState(cwd)
-			expect(result).toBe("Not a git repository")
+			const result = await getWorkingState(cwd) // 获取工作状态
+			expect(result).toBe("Not a git repository") // 断言结果是否为 "Not a git repository"
 		})
 	})
 })
