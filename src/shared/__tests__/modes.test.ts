@@ -1,6 +1,8 @@
 import { isToolAllowedForMode, FileRestrictionError, ModeConfig } from "../modes"
 
+// 测试 isToolAllowedForMode 函数
 describe("isToolAllowedForMode", () => {
+	// 自定义模式配置
 	const customModes: ModeConfig[] = [
 		{
 			slug: "markdown-editor",
@@ -22,26 +24,30 @@ describe("isToolAllowedForMode", () => {
 		},
 	]
 
+	// 测试始终可用的工具
 	it("allows always available tools", () => {
 		expect(isToolAllowedForMode("ask_followup_question", "markdown-editor", customModes)).toBe(true)
 		expect(isToolAllowedForMode("attempt_completion", "markdown-editor", customModes)).toBe(true)
 	})
 
+	// 测试不受限制的工具
 	it("allows unrestricted tools", () => {
 		expect(isToolAllowedForMode("read_file", "markdown-editor", customModes)).toBe(true)
 		expect(isToolAllowedForMode("browser_action", "markdown-editor", customModes)).toBe(true)
 	})
 
+	// 测试文件限制
 	describe("file restrictions", () => {
+		// 测试允许编辑匹配的文件
 		it("allows editing matching files", () => {
-			// Test markdown editor mode
+			// 测试 markdown 编辑器模式
 			const mdResult = isToolAllowedForMode("write_to_file", "markdown-editor", customModes, undefined, {
 				path: "test.md",
 				content: "# Test",
 			})
 			expect(mdResult).toBe(true)
 
-			// Test CSS editor mode
+			 // 测试 CSS 编辑器模式
 			const cssResult = isToolAllowedForMode("write_to_file", "css-editor", customModes, undefined, {
 				path: "styles.css",
 				content: ".test { color: red; }",
@@ -49,8 +55,9 @@ describe("isToolAllowedForMode", () => {
 			expect(cssResult).toBe(true)
 		})
 
+		// 测试拒绝编辑不匹配的文件
 		it("rejects editing non-matching files", () => {
-			// Test markdown editor mode with non-markdown file
+			// 测试 markdown 编辑器模式下的非 markdown 文件
 			expect(() =>
 				isToolAllowedForMode("write_to_file", "markdown-editor", customModes, undefined, {
 					path: "test.js",
@@ -64,7 +71,7 @@ describe("isToolAllowedForMode", () => {
 				}),
 			).toThrow(/\\.md\$/)
 
-			// Test CSS editor mode with non-CSS file
+			// 测试 CSS 编辑器模式下的非 CSS 文件
 			expect(() =>
 				isToolAllowedForMode("write_to_file", "css-editor", customModes, undefined, {
 					path: "test.js",
@@ -79,8 +86,9 @@ describe("isToolAllowedForMode", () => {
 			).toThrow(/\\.css\$/)
 		})
 
+		// 测试处理部分流式传输的情况（仅路径，没有内容/差异）
 		it("handles partial streaming cases (path only, no content/diff)", () => {
-			// Should allow path-only for matching files (no validation yet since content/diff not provided)
+			// 应该允许仅路径的匹配文件（由于未提供内容/差异，因此尚未验证）
 			expect(
 				isToolAllowedForMode("write_to_file", "markdown-editor", customModes, undefined, {
 					path: "test.js",
@@ -93,7 +101,7 @@ describe("isToolAllowedForMode", () => {
 				}),
 			).toBe(true)
 
-			// Should allow path-only for ask mode too
+			// 也应该允许仅路径的 ask 模式
 			expect(
 				isToolAllowedForMode("write_to_file", "ask", [], undefined, {
 					path: "test.js",
@@ -101,22 +109,23 @@ describe("isToolAllowedForMode", () => {
 			).toBe(true)
 		})
 
+		// 测试将限制应用于 write_to_file 和 apply_diff
 		it("applies restrictions to both write_to_file and apply_diff", () => {
-			// Test write_to_file
+			// 测试 write_to_file
 			const writeResult = isToolAllowedForMode("write_to_file", "markdown-editor", customModes, undefined, {
 				path: "test.md",
 				content: "# Test",
 			})
 			expect(writeResult).toBe(true)
 
-			// Test apply_diff
+			// 测试 apply_diff
 			const diffResult = isToolAllowedForMode("apply_diff", "markdown-editor", customModes, undefined, {
 				path: "test.md",
 				diff: "- old\n+ new",
 			})
 			expect(diffResult).toBe(true)
 
-			// Test both with non-matching file
+			// 测试不匹配文件的情况
 			expect(() =>
 				isToolAllowedForMode("write_to_file", "markdown-editor", customModes, undefined, {
 					path: "test.js",
@@ -132,6 +141,7 @@ describe("isToolAllowedForMode", () => {
 			).toThrow(FileRestrictionError)
 		})
 
+		// 测试自定义模式下的文件限制错误描述
 		it("uses description in file restriction error for custom modes", () => {
 			const customModesWithDescription: ModeConfig[] = [
 				{
@@ -146,7 +156,7 @@ describe("isToolAllowedForMode", () => {
 				},
 			]
 
-			// Test write_to_file with non-matching file
+			// 测试 write_to_file 的不匹配文件
 			expect(() =>
 				isToolAllowedForMode("write_to_file", "docs-editor", customModesWithDescription, undefined, {
 					path: "test.js",
@@ -160,7 +170,7 @@ describe("isToolAllowedForMode", () => {
 				}),
 			).toThrow(/Documentation files only/)
 
-			// Test apply_diff with non-matching file
+			// 测试 apply_diff 的不匹配文件
 			expect(() =>
 				isToolAllowedForMode("apply_diff", "docs-editor", customModesWithDescription, undefined, {
 					path: "test.js",
@@ -174,7 +184,7 @@ describe("isToolAllowedForMode", () => {
 				}),
 			).toThrow(/Documentation files only/)
 
-			// Test that matching files are allowed
+			// 测试匹配文件的情况
 			expect(
 				isToolAllowedForMode("write_to_file", "docs-editor", customModesWithDescription, undefined, {
 					path: "test.md",
@@ -189,7 +199,7 @@ describe("isToolAllowedForMode", () => {
 				}),
 			).toBe(true)
 
-			// Test partial streaming cases
+			// 测试部分流式传输的情况
 			expect(
 				isToolAllowedForMode("write_to_file", "docs-editor", customModesWithDescription, undefined, {
 					path: "test.js",
@@ -197,8 +207,9 @@ describe("isToolAllowedForMode", () => {
 			).toBe(true)
 		})
 
+		// 测试 ask 模式仅允许编辑 markdown 文件
 		it("allows ask mode to edit markdown files only", () => {
-			// Should allow editing markdown files
+			// 应该允许编辑 markdown 文件
 			expect(
 				isToolAllowedForMode("write_to_file", "ask", [], undefined, {
 					path: "test.md",
@@ -206,7 +217,7 @@ describe("isToolAllowedForMode", () => {
 				}),
 			).toBe(true)
 
-			// Should allow applying diffs to markdown files
+			// 应该允许对 markdown 文件应用差异
 			expect(
 				isToolAllowedForMode("apply_diff", "ask", [], undefined, {
 					path: "readme.md",
@@ -214,7 +225,7 @@ describe("isToolAllowedForMode", () => {
 				}),
 			).toBe(true)
 
-			// Should reject non-markdown files
+			// 应该拒绝非 markdown 文件
 			expect(() =>
 				isToolAllowedForMode("write_to_file", "ask", [], undefined, {
 					path: "test.js",
@@ -228,17 +239,19 @@ describe("isToolAllowedForMode", () => {
 				}),
 			).toThrow(/Markdown files only/)
 
-			// Should maintain read capabilities
+			// 应该保持读取功能
 			expect(isToolAllowedForMode("read_file", "ask", [])).toBe(true)
 			expect(isToolAllowedForMode("browser_action", "ask", [])).toBe(true)
 			expect(isToolAllowedForMode("use_mcp_tool", "ask", [])).toBe(true)
 		})
 	})
 
+	// 测试处理不存在的模式
 	it("handles non-existent modes", () => {
 		expect(isToolAllowedForMode("write_to_file", "non-existent", customModes)).toBe(false)
 	})
 
+	// 测试尊重工具要求
 	it("respects tool requirements", () => {
 		const toolRequirements = {
 			write_to_file: false,
@@ -247,7 +260,9 @@ describe("isToolAllowedForMode", () => {
 		expect(isToolAllowedForMode("write_to_file", "markdown-editor", customModes, toolRequirements)).toBe(false)
 	})
 
+	// 测试实验性工具
 	describe("experimental tools", () => {
+		// 测试在实验禁用时禁用工具
 		it("disables tools when experiment is disabled", () => {
 			const experiments = {
 				search_and_replace: false,
@@ -270,6 +285,7 @@ describe("isToolAllowedForMode", () => {
 			).toBe(false)
 		})
 
+		// 测试在实验启用时允许工具
 		it("allows tools when experiment is enabled", () => {
 			const experiments = {
 				search_and_replace: true,
@@ -292,6 +308,7 @@ describe("isToolAllowedForMode", () => {
 			).toBe(true)
 		})
 
+		// 测试在实验禁用时允许非实验性工具
 		it("allows non-experimental tools when experiments are disabled", () => {
 			const experiments = {
 				search_and_replace: false,
@@ -315,7 +332,9 @@ describe("isToolAllowedForMode", () => {
 	})
 })
 
+// 测试 FileRestrictionError
 describe("FileRestrictionError", () => {
+	// 测试在未提供描述时格式化错误消息
 	it("formats error message with pattern when no description provided", () => {
 		const error = new FileRestrictionError("Markdown Editor", "\\.md$", undefined, "test.js")
 		expect(error.message).toBe(
@@ -324,6 +343,7 @@ describe("FileRestrictionError", () => {
 		expect(error.name).toBe("FileRestrictionError")
 	})
 
+	// 测试在提供描述时格式化错误消息
 	it("formats error message with description when provided", () => {
 		const error = new FileRestrictionError("Markdown Editor", "\\.md$", "Markdown files only", "test.js")
 		expect(error.message).toBe(

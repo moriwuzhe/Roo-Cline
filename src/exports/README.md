@@ -1,10 +1,10 @@
 # Cline API
 
-The Cline extension exposes an API that can be used by other extensions. To use this API in your extension:
+Cline 扩展公开了一个 API，其他扩展可以使用该 API。要在您的扩展中使用此 API，请执行以下步骤：
 
-1. Copy `src/extension-api/cline.d.ts` to your extension's source directory.
-2. Include `cline.d.ts` in your extension's compilation.
-3. Get access to the API with the following code:
+1. 将 `src/extension-api/cline.d.ts` 复制到您的扩展的源目录中。
+2. 在您的扩展编译中包含 `cline.d.ts`。
+3. 使用以下代码获取 API 访问权限：
 
     ```ts
     const clineExtension = vscode.extensions.getExtension<ClineAPI>("rooveterinaryinc.roo-cline")
@@ -16,35 +16,35 @@ The Cline extension exposes an API that can be used by other extensions. To use 
     const cline = clineExtension.exports
 
     if (cline) {
-    	// Now you can use the API
+    	 // 现在您可以使用 API
 
-    	// Set custom instructions
+    	// 设置自定义指令
     	await cline.setCustomInstructions("Talk like a pirate")
 
-    	// Get custom instructions
+    	// 获取自定义指令
     	const instructions = await cline.getCustomInstructions()
     	console.log("Current custom instructions:", instructions)
 
-    	// Start a new task with an initial message
+    	// 使用初始消息启动新任务
     	await cline.startNewTask("Hello, Cline! Let's make a new project...")
 
-    	// Start a new task with an initial message and images
+    	// 使用初始消息和图像启动新任务
     	await cline.startNewTask("Use this design language", ["data:image/webp;base64,..."])
 
-    	// Send a message to the current task
+    	// 向当前任务发送消息
     	await cline.sendMessage("Can you fix the @problems?")
 
-    	// Simulate pressing the primary button in the chat interface (e.g. 'Save' or 'Proceed While Running')
+    	// 模拟按下聊天界面中的主按钮（例如“保存”或“继续运行”）
     	await cline.pressPrimaryButton()
 
-    	// Simulate pressing the secondary button in the chat interface (e.g. 'Reject')
+    	// 模拟按下聊天界面中的次按钮（例如“拒绝”）
     	await cline.pressSecondaryButton()
     } else {
     	console.error("Cline API is not available")
     }
     ```
 
-    **Note:** To ensure that the `rooveterinaryinc.roo-cline` extension is activated before your extension, add it to the `extensionDependencies` in your `package.json`:
+    **注意：** 为确保在您的扩展之前激活 `rooveterinaryinc.roo-cline` 扩展，请将其添加到 `package.json` 中的 `extensionDependencies`：
 
     ```json
     "extensionDependencies": [
@@ -52,4 +52,4 @@ The Cline extension exposes an API that can be used by other extensions. To use 
     ]
     ```
 
-For detailed information on the available methods and their usage, refer to the `cline.d.ts` file.
+有关可用方法及其使用的详细信息，请参阅 `cline.d.ts` 文件。

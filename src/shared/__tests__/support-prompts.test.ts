@@ -1,9 +1,11 @@
 import { supportPrompt } from "../support-prompt"
 
+// 描述 "Code Action Prompts" 测试套件
 describe("Code Action Prompts", () => {
 	const testFilePath = "test/file.ts"
 	const testCode = "function test() { return true; }"
 
+	// 描述 "EXPLAIN action" 测试用例
 	describe("EXPLAIN action", () => {
 		it("should format explain prompt correctly", () => {
 			const prompt = supportPrompt.create("EXPLAIN", {
@@ -19,6 +21,7 @@ describe("Code Action Prompts", () => {
 		})
 	})
 
+	// 描述 "FIX action" 测试用例
 	describe("FIX action", () => {
 		it("should format fix prompt without diagnostics", () => {
 			const prompt = supportPrompt.create("FIX", {
@@ -58,6 +61,7 @@ describe("Code Action Prompts", () => {
 		})
 	})
 
+	// 描述 "IMPROVE action" 测试用例
 	describe("IMPROVE action", () => {
 		it("should format improve prompt correctly", () => {
 			const prompt = supportPrompt.create("IMPROVE", {
@@ -74,6 +78,7 @@ describe("Code Action Prompts", () => {
 		})
 	})
 
+	// 描述 "ENHANCE action" 测试用例
 	describe("ENHANCE action", () => {
 		it("should format enhance prompt correctly", () => {
 			const prompt = supportPrompt.create("ENHANCE", {
@@ -89,6 +94,7 @@ describe("Code Action Prompts", () => {
 		})
 	})
 
+	// 描述 "get template" 测试用例
 	describe("get template", () => {
 		it("should return default template when no custom prompts provided", () => {
 			const template = supportPrompt.get(undefined, "EXPLAIN")
@@ -113,6 +119,7 @@ describe("Code Action Prompts", () => {
 		})
 	})
 
+	// 描述 "create with custom prompts" 测试用例
 	describe("create with custom prompts", () => {
 		it("should use custom template when provided", () => {
 			const customTemplate = "Custom template for ${filePath}"

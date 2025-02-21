@@ -1,42 +1,42 @@
 import { ClineMessage } from "./ExtensionMessage"
 
+// 定义 ApiMetrics 接口
 interface ApiMetrics {
-	totalTokensIn: number
-	totalTokensOut: number
-	totalCacheWrites?: number
-	totalCacheReads?: number
-	totalCost: number
-	contextTokens: number // Total tokens in conversation (last message's tokensIn + tokensOut + cacheWrites + cacheReads)
+	totalTokensIn: number // 总输入令牌数
+	totalTokensOut: number // 总输出令牌数
+	totalCacheWrites?: number // 可选的总缓存写入次数
+	totalCacheReads?: number // 可选的总缓存读取次数
+	totalCost: number // 总成本
+	contextTokens: number // 对话中的总令牌数（最后一条消息的 tokensIn + tokensOut + cacheWrites + cacheReads）
 }
 
 /**
- * Calculates API metrics from an array of ClineMessages.
+ * 从 ClineMessages 数组计算 API 指标。
  *
- * This function processes 'api_req_started' messages that have been combined with their
- * corresponding 'api_req_finished' messages by the combineApiRequests function.
- * It extracts and sums up the tokensIn, tokensOut, cacheWrites, cacheReads, and cost from these messages.
+ * 此函数处理已通过 combineApiRequests 函数合并其对应的 'api_req_finished' 消息的 'api_req_started' 消息。
+ * 它提取并汇总这些消息中的 tokensIn、tokensOut、cacheWrites、cacheReads 和成本。
  *
- * @param messages - An array of ClineMessage objects to process.
- * @returns An ApiMetrics object containing totalTokensIn, totalTokensOut, totalCacheWrites, totalCacheReads, totalCost, and contextTokens.
+ * @param messages - 要处理的 ClineMessage 对象数组。
+ * @returns 包含 totalTokensIn、totalTokensOut、totalCacheWrites、totalCacheReads、totalCost 和 contextTokens 的 ApiMetrics 对象。
  *
  * @example
  * const messages = [
  *   { type: "say", say: "api_req_started", text: '{"request":"GET /api/data","tokensIn":10,"tokensOut":20,"cost":0.005}', ts: 1000 }
  * ];
  * const { totalTokensIn, totalTokensOut, totalCost } = getApiMetrics(messages);
- * // Result: { totalTokensIn: 10, totalTokensOut: 20, totalCost: 0.005 }
+ * // 结果: { totalTokensIn: 10, totalTokensOut: 20, totalCost: 0.005 }
  */
 export function getApiMetrics(messages: ClineMessage[]): ApiMetrics {
 	const result: ApiMetrics = {
-		totalTokensIn: 0,
-		totalTokensOut: 0,
-		totalCacheWrites: undefined,
-		totalCacheReads: undefined,
-		totalCost: 0,
-		contextTokens: 0,
+		totalTokensIn: 0, // 初始化总输入令牌数
+		totalTokensOut: 0, // 初始化总输出令牌数
+		totalCacheWrites: undefined, // 初始化总缓存写入次数
+		totalCacheReads: undefined, // 初始化总缓存读取次数
+		totalCost: 0, // 初始化总成本
+		contextTokens: 0, // 初始化对话中的总令牌数
 	}
 
-	// Helper function to get total tokens from a message
+	// 辅助函数，从消息中获取总令牌数
 	const getTotalTokensFromMessage = (message: ClineMessage): number => {
 		if (!message.text) return 0
 		try {
@@ -47,7 +47,7 @@ export function getApiMetrics(messages: ClineMessage[]): ApiMetrics {
 		}
 	}
 
-	// Find the last api_req_started message that has any tokens
+	// 查找最后一条具有令牌的 api_req_started 消息
 	const lastApiReq = [...messages].reverse().find((message) => {
 		if (message.type === "say" && message.say === "api_req_started") {
 			return getTotalTokensFromMessage(message) > 0
@@ -55,7 +55,7 @@ export function getApiMetrics(messages: ClineMessage[]): ApiMetrics {
 		return false
 	})
 
-	// Calculate running totals
+	// 计算运行总数
 	messages.forEach((message) => {
 		if (message.type === "say" && message.say === "api_req_started" && message.text) {
 			try {
@@ -77,12 +77,12 @@ export function getApiMetrics(messages: ClineMessage[]): ApiMetrics {
 					result.totalCost += cost
 				}
 
-				// If this is the last api request with tokens, use its total for context size
+				// 如果这是最后一个具有令牌的 API 请求，请使用其总数作为上下文大小
 				if (message === lastApiReq) {
 					result.contextTokens = getTotalTokensFromMessage(message)
 				}
 			} catch (error) {
-				console.error("Error parsing JSON:", error)
+				console.error("解析 JSON 时出错:", error)
 			}
 		}
 	})

@@ -12,26 +12,27 @@ declare global {
 	var panel: vscode.WebviewPanel | undefined
 }
 
+// 运行测试的主函数
 export async function run(): Promise<void> {
-	// Create the mocha test
+	// 创建 Mocha 测试实例
 	const mocha = new Mocha({
 		ui: "tdd",
-		timeout: 600000, // 10 minutes to compensate for time communicating with LLM while running in GHA
+		timeout: 600000, // 10 分钟超时，以补偿在 GHA 中与 LLM 通信的时间
 	})
 
 	const testsRoot = path.resolve(__dirname, "..")
 
 	try {
-		// Find all test files
+		// 查找所有测试文件
 		const files = await glob("**/**.test.js", { cwd: testsRoot })
 
-		// Add files to the test suite
+		// 将文件添加到测试套件中
 		files.forEach((f: string) => mocha.addFile(path.resolve(testsRoot, f)))
 
-		//Set up global extension, api, provider, and panel
+		// 设置全局扩展、api、provider 和 panel
 		globalThis.extension = vscode.extensions.getExtension("RooVeterinaryInc.roo-cline")
 		if (!globalThis.extension) {
-			throw new Error("Extension not found")
+			throw new Error("Extension not found") // 如果扩展不存在，则抛出错误
 		}
 
 		globalThis.api = globalThis.extension.isActive
@@ -65,30 +66,30 @@ export async function run(): Promise<void> {
 
 		while (Date.now() - startTime < timeout) {
 			if (globalThis.provider.viewLaunched) {
-				break
+				break // 如果 webview 已启动，则退出循环
 			}
 
-			await new Promise((resolve) => setTimeout(resolve, interval))
+			await new Promise((resolve) => setTimeout(resolve, interval)) // 等待一段时间后继续检查
 		}
 
-		// Run the mocha test
+		// 运行 Mocha 测试
 		return new Promise((resolve, reject) => {
 			try {
 				mocha.run((failures: number) => {
 					if (failures > 0) {
-						reject(new Error(`${failures} tests failed.`))
+						reject(new Error(`${failures} tests failed.`)) // 如果有测试失败，则拒绝 Promise
 					} else {
-						resolve()
+						resolve() // 如果所有测试通过，则解析 Promise
 					}
 				})
 			} catch (err) {
 				console.error(err)
-				reject(err)
+				reject(err) // 捕获运行时错误并拒绝 Promise
 			}
 		})
 	} catch (err) {
 		console.error("Error while running tests:")
 		console.error(err)
-		throw err
+		throw err // 捕获初始化错误并抛出
 	}
 }

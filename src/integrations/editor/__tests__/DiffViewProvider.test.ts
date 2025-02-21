@@ -1,50 +1,50 @@
-import { DiffViewProvider } from "../DiffViewProvider"
-import * as vscode from "vscode"
+import { DiffViewProvider } from "../DiffViewProvider" // 导入 DiffViewProvider 模块
+import * as vscode from "vscode" // 导入 VSCode 模块
 
-// Mock vscode
+// 模拟 vscode
 jest.mock("vscode", () => ({
 	workspace: {
-		applyEdit: jest.fn(),
+		applyEdit: jest.fn(), // 模拟 applyEdit 函数
 	},
 	window: {
-		createTextEditorDecorationType: jest.fn(),
+		createTextEditorDecorationType: jest.fn(), // 模拟 createTextEditorDecorationType 函数
 	},
 	WorkspaceEdit: jest.fn().mockImplementation(() => ({
-		replace: jest.fn(),
-		delete: jest.fn(),
+		replace: jest.fn(), // 模拟 replace 函数
+		delete: jest.fn(), // 模拟 delete 函数
 	})),
-	Range: jest.fn(),
-	Position: jest.fn(),
-	Selection: jest.fn(),
+	Range: jest.fn(), // 模拟 Range 构造函数
+	Position: jest.fn(), // 模拟 Position 构造函数
+	Selection: jest.fn(), // 模拟 Selection 构造函数
 	TextEditorRevealType: {
-		InCenter: 2,
+		InCenter: 2, // 模拟 TextEditorRevealType 枚举
 	},
 }))
 
-// Mock DecorationController
+// 模拟 DecorationController
 jest.mock("../DecorationController", () => ({
 	DecorationController: jest.fn().mockImplementation(() => ({
-		setActiveLine: jest.fn(),
-		updateOverlayAfterLine: jest.fn(),
-		clear: jest.fn(),
+		setActiveLine: jest.fn(), // 模拟 setActiveLine 函数
+		updateOverlayAfterLine: jest.fn(), // 模拟 updateOverlayAfterLine 函数
+		clear: jest.fn(), // 模拟 clear 函数
 	})),
 }))
 
 describe("DiffViewProvider", () => {
 	let diffViewProvider: DiffViewProvider
-	const mockCwd = "/mock/cwd"
+	const mockCwd = "/mock/cwd" // 模拟当前工作目录
 	let mockWorkspaceEdit: { replace: jest.Mock; delete: jest.Mock }
 
 	beforeEach(() => {
-		jest.clearAllMocks()
+		jest.clearAllMocks() // 清除所有模拟
 		mockWorkspaceEdit = {
-			replace: jest.fn(),
-			delete: jest.fn(),
+			replace: jest.fn(), // 模拟 replace 函数
+			delete: jest.fn(), // 模拟 delete 函数
 		}
 		;(vscode.WorkspaceEdit as jest.Mock).mockImplementation(() => mockWorkspaceEdit)
 
 		diffViewProvider = new DiffViewProvider(mockCwd)
-		// Mock the necessary properties and methods
+		// 模拟必要的属性和方法
 		;(diffViewProvider as any).relPath = "test.txt"
 		;(diffViewProvider as any).activeDiffEditor = {
 			document: {

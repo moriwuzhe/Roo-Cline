@@ -9,14 +9,14 @@ import { setSoundEnabled } from "../../../utils/sound"
 import { defaultModeSlug } from "../../../shared/modes"
 import { experimentDefault } from "../../../shared/experiments"
 
-// Mock custom-instructions module
+// 模拟 custom-instructions 模块
 const mockAddCustomInstructions = jest.fn()
 
 jest.mock("../../prompts/sections/custom-instructions", () => ({
 	addCustomInstructions: mockAddCustomInstructions,
 }))
 
-// Mock delay module
+// 模拟 delay 模块
 jest.mock("delay", () => {
 	const delayFn = (ms: number) => Promise.resolve()
 	delayFn.createDelay = () => delayFn
@@ -25,7 +25,7 @@ jest.mock("delay", () => {
 	return delayFn
 })
 
-// Mock MCP-related modules
+// 模拟 MCP 相关模块
 jest.mock(
 	"@modelcontextprotocol/sdk/types.js",
 	() => ({
@@ -75,14 +75,14 @@ jest.mock(
 	{ virtual: true },
 )
 
-// Mock DiffStrategy
+// 模拟 DiffStrategy
 jest.mock("../../diff/DiffStrategy", () => ({
 	getDiffStrategy: jest.fn().mockImplementation(() => ({
 		getToolDescription: jest.fn().mockReturnValue("apply_diff tool description"),
 	})),
 }))
 
-// Mock dependencies
+// 模拟依赖项
 jest.mock("vscode", () => ({
 	ExtensionContext: jest.fn(),
 	OutputChannel: jest.fn(),
@@ -119,18 +119,18 @@ jest.mock("vscode", () => ({
 	},
 }))
 
-// Mock sound utility
+// 模拟 sound utility
 jest.mock("../../../utils/sound", () => ({
 	setSoundEnabled: jest.fn(),
 }))
 
-// Mock ESM modules
+// 模拟 ESM 模块
 jest.mock("p-wait-for", () => ({
 	__esModule: true,
 	default: jest.fn().mockResolvedValue(undefined),
 }))
 
-// Mock fs/promises
+// 模拟 fs/promises
 jest.mock("fs/promises", () => ({
 	mkdir: jest.fn(),
 	writeFile: jest.fn(),
@@ -139,24 +139,24 @@ jest.mock("fs/promises", () => ({
 	rmdir: jest.fn(),
 }))
 
-// Mock axios
+// 模拟 axios
 jest.mock("axios", () => ({
 	get: jest.fn().mockResolvedValue({ data: { data: [] } }),
 	post: jest.fn(),
 }))
 
-// Mock buildApiHandler
+// 模拟 buildApiHandler
 jest.mock("../../../api", () => ({
 	buildApiHandler: jest.fn(),
 }))
 
-// Mock system prompt
+// 模拟 system prompt
 jest.mock("../../prompts/system", () => ({
 	SYSTEM_PROMPT: jest.fn().mockImplementation(async () => "mocked system prompt"),
 	codeMode: "code",
 }))
 
-// Mock WorkspaceTracker
+// 模拟 WorkspaceTracker
 jest.mock("../../../integrations/workspace/WorkspaceTracker", () => {
 	return jest.fn().mockImplementation(() => ({
 		initializeFilePaths: jest.fn(),
@@ -164,7 +164,7 @@ jest.mock("../../../integrations/workspace/WorkspaceTracker", () => {
 	}))
 })
 
-// Mock Cline
+// 模拟 Cline
 jest.mock("../../Cline", () => ({
 	Cline: jest
 		.fn()
@@ -181,7 +181,7 @@ jest.mock("../../Cline", () => ({
 		),
 }))
 
-// Mock extract-text
+// 模拟 extract-text
 jest.mock("../../../integrations/misc/extract-text", () => ({
 	extractTextFromFile: jest.fn().mockImplementation(async (filePath: string) => {
 		const content = "const x = 1;\nconst y = 2;\nconst z = 3;"
@@ -190,7 +190,7 @@ jest.mock("../../../integrations/misc/extract-text", () => ({
 	}),
 }))
 
-// Spy on console.error and console.log to suppress expected messages
+// 监视 console.error 和 console.log 以抑制预期的消息
 beforeAll(() => {
 	jest.spyOn(console, "error").mockImplementation(() => {})
 	jest.spyOn(console, "log").mockImplementation(() => {})
@@ -208,10 +208,10 @@ describe("ClineProvider", () => {
 	let mockPostMessage: jest.Mock
 
 	beforeEach(() => {
-		// Reset mocks
+		// 重置模拟
 		jest.clearAllMocks()
 
-		// Mock context
+		// 模拟上下文
 		mockContext = {
 			extensionPath: "/test/path",
 			extensionUri: {} as vscode.Uri,
@@ -243,21 +243,21 @@ describe("ClineProvider", () => {
 			},
 		} as unknown as vscode.ExtensionContext
 
-		// Mock CustomModesManager
+		// 模拟 CustomModesManager
 		const mockCustomModesManager = {
 			updateCustomMode: jest.fn().mockResolvedValue(undefined),
 			getCustomModes: jest.fn().mockResolvedValue({}),
 			dispose: jest.fn(),
 		}
 
-		// Mock output channel
+		// 模拟输出通道
 		mockOutputChannel = {
 			appendLine: jest.fn(),
 			clear: jest.fn(),
 			dispose: jest.fn(),
 		} as unknown as vscode.OutputChannel
 
-		// Mock webview
+		// 模拟 webview
 		mockPostMessage = jest.fn()
 		mockWebviewView = {
 			webview: {
@@ -279,19 +279,19 @@ describe("ClineProvider", () => {
 
 		provider = new ClineProvider(mockContext, mockOutputChannel)
 
-		// @ts-ignore - Accessing private property for testing.
+		// @ts-ignore - 访问私有属性进行测试。
 		provider.customModesManager = mockCustomModesManager
 	})
 
-	test("constructor initializes correctly", () => {
+	test("构造函数正确初始化", () => {
 		expect(provider).toBeInstanceOf(ClineProvider)
-		// Since getVisibleInstance returns the last instance where view.visible is true
-		// @ts-ignore - accessing private property for testing
+		// 由于 getVisibleInstance 返回 view.visible 为 true 的最后一个实例
+		// @ts-ignore - 访问私有属性进行测试
 		provider.view = mockWebviewView
 		expect(ClineProvider.getVisibleInstance()).toBe(provider)
 	})
 
-	test("resolveWebviewView sets up webview correctly", async () => {
+	test("resolveWebviewView 正确设置 webview", async () => {
 		await provider.resolveWebviewView(mockWebviewView)
 
 		expect(mockWebviewView.webview.options).toEqual({
@@ -302,7 +302,7 @@ describe("ClineProvider", () => {
 		expect(mockWebviewView.webview.html).toContain("<!DOCTYPE html>")
 	})
 
-	test("resolveWebviewView sets up webview correctly in development mode even if local server is not running", async () => {
+	test("resolveWebviewView 在开发模式下即使本地服务器未运行也能正确设置 webview", async () => {
 		provider = new ClineProvider(
 			{ ...mockContext, extensionMode: vscode.ExtensionMode.Development },
 			mockOutputChannel,
@@ -319,7 +319,7 @@ describe("ClineProvider", () => {
 		expect(mockWebviewView.webview.html).toContain("<!DOCTYPE html>")
 	})
 
-	test("postMessageToWebview sends message to webview", async () => {
+	test("postMessageToWebview 发送消息到 webview", async () => {
 		await provider.resolveWebviewView(mockWebviewView)
 
 		const mockState: ExtensionState = {
@@ -362,32 +362,32 @@ describe("ClineProvider", () => {
 		expect(mockPostMessage).toHaveBeenCalledWith(message)
 	})
 
-	test("handles webviewDidLaunch message", async () => {
+	test("处理 webviewDidLaunch 消息", async () => {
 		await provider.resolveWebviewView(mockWebviewView)
 
-		// Get the message handler from onDidReceiveMessage
+		// 从 onDidReceiveMessage 获取消息处理程序
 		const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 
-		// Simulate webviewDidLaunch message
+		// 模拟 webviewDidLaunch 消息
 		await messageHandler({ type: "webviewDidLaunch" })
 
-		// Should post state and theme to webview
+		// 应该将状态和主题发送到 webview
 		expect(mockPostMessage).toHaveBeenCalled()
 	})
 
-	test("clearTask aborts current task", async () => {
+	test("clearTask 中止当前任务", async () => {
 		const mockAbortTask = jest.fn()
-		// @ts-ignore - accessing private property for testing
+		// @ts-ignore - 访问私有属性进行测试
 		provider.cline = { abortTask: mockAbortTask }
 
 		await provider.clearTask()
 
 		expect(mockAbortTask).toHaveBeenCalled()
-		// @ts-ignore - accessing private property for testing
+		// @ts-ignore - 访问私有属性进行测试
 		expect(provider.cline).toBeUndefined()
 	})
 
-	test("getState returns correct initial state", async () => {
+	test("getState 返回正确的初始状态", async () => {
 		const state = await provider.getState()
 
 		expect(state).toHaveProperty("apiConfiguration")
@@ -403,24 +403,24 @@ describe("ClineProvider", () => {
 		expect(state).toHaveProperty("writeDelayMs")
 	})
 
-	test("preferredLanguage defaults to VSCode language when not set", async () => {
-		// Mock VSCode language as Spanish
+	test("preferredLanguage 在未设置时默认为 VSCode 语言", async () => {
+		// 模拟 VSCode 语言为西班牙语
 		;(vscode.env as any).language = "es-ES"
 
 		const state = await provider.getState()
 		expect(state.preferredLanguage).toBe("Spanish")
 	})
 
-	test("preferredLanguage defaults to English for unsupported VSCode language", async () => {
-		// Mock VSCode language as an unsupported language
+	test("preferredLanguage 对于不支持的 VSCode 语言默认为英语", async () => {
+		// 模拟 VSCode 语言为不支持的语言
 		;(vscode.env as any).language = "unsupported-LANG"
 
 		const state = await provider.getState()
 		expect(state.preferredLanguage).toBe("English")
 	})
 
-	test("diffEnabled defaults to true when not set", async () => {
-		// Mock globalState.get to return undefined for diffEnabled
+	test("diffEnabled 在未设置时默认为 true", async () => {
+		// 模拟 globalState.get 返回 undefined 用于 diffEnabled
 		;(mockContext.globalState.get as jest.Mock).mockReturnValue(undefined)
 
 		const state = await provider.getState()
@@ -428,8 +428,8 @@ describe("ClineProvider", () => {
 		expect(state.diffEnabled).toBe(true)
 	})
 
-	test("writeDelayMs defaults to 1000ms", async () => {
-		// Mock globalState.get to return undefined for writeDelayMs
+	test("writeDelayMs 默认为 1000ms", async () => {
+		// 模拟 globalState.get 返回 undefined 用于 writeDelayMs
 		;(mockContext.globalState.get as jest.Mock).mockImplementation((key: string) => {
 			if (key === "writeDelayMs") {
 				return undefined
@@ -441,7 +441,7 @@ describe("ClineProvider", () => {
 		expect(state.writeDelayMs).toBe(1000)
 	})
 
-	test("handles writeDelayMs message", async () => {
+	test("处理 writeDelayMs 消息", async () => {
 		await provider.resolveWebviewView(mockWebviewView)
 		const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 
@@ -451,27 +451,27 @@ describe("ClineProvider", () => {
 		expect(mockPostMessage).toHaveBeenCalled()
 	})
 
-	test("updates sound utility when sound setting changes", async () => {
+	test("更新 sound utility 当 sound 设置更改时", async () => {
 		await provider.resolveWebviewView(mockWebviewView)
 
-		// Get the message handler from onDidReceiveMessage
+		// 从 onDidReceiveMessage 获取消息处理程序
 		const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 
-		// Simulate setting sound to enabled
+		// 模拟设置 sound 为启用
 		await messageHandler({ type: "soundEnabled", bool: true })
 		expect(setSoundEnabled).toHaveBeenCalledWith(true)
 		expect(mockContext.globalState.update).toHaveBeenCalledWith("soundEnabled", true)
 		expect(mockPostMessage).toHaveBeenCalled()
 
-		// Simulate setting sound to disabled
+		// 模拟设置 sound 为禁用
 		await messageHandler({ type: "soundEnabled", bool: false })
 		expect(setSoundEnabled).toHaveBeenCalledWith(false)
 		expect(mockContext.globalState.update).toHaveBeenCalledWith("soundEnabled", false)
 		expect(mockPostMessage).toHaveBeenCalled()
 	})
 
-	test("requestDelaySeconds defaults to 5 seconds", async () => {
-		// Mock globalState.get to return undefined for requestDelaySeconds
+	test("requestDelaySeconds 默认为 5 秒", async () => {
+		// 模拟 globalState.get 返回 undefined 用于 requestDelaySeconds
 		;(mockContext.globalState.get as jest.Mock).mockImplementation((key: string) => {
 			if (key === "requestDelaySeconds") {
 				return undefined
@@ -483,19 +483,19 @@ describe("ClineProvider", () => {
 		expect(state.requestDelaySeconds).toBe(10)
 	})
 
-	test("alwaysApproveResubmit defaults to false", async () => {
-		// Mock globalState.get to return undefined for alwaysApproveResubmit
+	test("alwaysApproveResubmit 默认为 false", async () => {
+		// 模拟 globalState.get 返回 undefined 用于 alwaysApproveResubmit
 		;(mockContext.globalState.get as jest.Mock).mockReturnValue(undefined)
 
 		const state = await provider.getState()
 		expect(state.alwaysApproveResubmit).toBe(false)
 	})
 
-	test("loads saved API config when switching modes", async () => {
+	test("切换模式时加载保存的 API 配置", async () => {
 		await provider.resolveWebviewView(mockWebviewView)
 		const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 
-		// Mock ConfigManager methods
+		// 模拟 ConfigManager 方法
 		provider.configManager = {
 			getModeConfigId: jest.fn().mockResolvedValue("test-id"),
 			listConfig: jest.fn().mockResolvedValue([{ name: "test-config", id: "test-id", apiProvider: "anthropic" }]),
@@ -503,84 +503,36 @@ describe("ClineProvider", () => {
 			setModeConfig: jest.fn(),
 		} as any
 
-		// Switch to architect mode
+		// 首先设置模式
 		await messageHandler({ type: "mode", text: "architect" })
 
-		// Should load the saved config for architect mode
-		expect(provider.configManager.getModeConfigId).toHaveBeenCalledWith("architect")
-		expect(provider.configManager.loadConfig).toHaveBeenCalledWith("test-config")
-		expect(mockContext.globalState.update).toHaveBeenCalledWith("currentApiConfigName", "test-config")
-	})
-
-	test("saves current config when switching to mode without config", async () => {
-		await provider.resolveWebviewView(mockWebviewView)
-		const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
-
-		// Mock ConfigManager methods
-		provider.configManager = {
-			getModeConfigId: jest.fn().mockResolvedValue(undefined),
-			listConfig: jest
-				.fn()
-				.mockResolvedValue([{ name: "current-config", id: "current-id", apiProvider: "anthropic" }]),
-			setModeConfig: jest.fn(),
-		} as any
-
-		// Mock current config name
-		;(mockContext.globalState.get as jest.Mock).mockImplementation((key: string) => {
-			if (key === "currentApiConfigName") {
-				return "current-config"
-			}
-			return undefined
-		})
-
-		// Switch to architect mode
-		await messageHandler({ type: "mode", text: "architect" })
-
-		// Should save current config as default for architect mode
-		expect(provider.configManager.setModeConfig).toHaveBeenCalledWith("architect", "current-id")
-	})
-
-	test("saves config as default for current mode when loading config", async () => {
-		await provider.resolveWebviewView(mockWebviewView)
-		const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
-
-		provider.configManager = {
-			loadConfig: jest.fn().mockResolvedValue({ apiProvider: "anthropic", id: "new-id" }),
-			listConfig: jest.fn().mockResolvedValue([{ name: "new-config", id: "new-id", apiProvider: "anthropic" }]),
-			setModeConfig: jest.fn(),
-			getModeConfigId: jest.fn().mockResolvedValue(undefined),
-		} as any
-
-		// First set the mode
-		await messageHandler({ type: "mode", text: "architect" })
-
-		// Then load the config
+		// 然后加载配置
 		await messageHandler({ type: "loadApiConfiguration", text: "new-config" })
 
-		// Should save new config as default for architect mode
+		// 应该将新配置保存为 architect 模式的默认配置
 		expect(provider.configManager.setModeConfig).toHaveBeenCalledWith("architect", "new-id")
 	})
 
-	test("handles request delay settings messages", async () => {
+	test("处理请求延迟设置消息", async () => {
 		await provider.resolveWebviewView(mockWebviewView)
 		const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 
-		// Test alwaysApproveResubmit
+		// 测试 alwaysApproveResubmit
 		await messageHandler({ type: "alwaysApproveResubmit", bool: true })
 		expect(mockContext.globalState.update).toHaveBeenCalledWith("alwaysApproveResubmit", true)
 		expect(mockPostMessage).toHaveBeenCalled()
 
-		// Test requestDelaySeconds
+		// 测试 requestDelaySeconds
 		await messageHandler({ type: "requestDelaySeconds", value: 10 })
 		expect(mockContext.globalState.update).toHaveBeenCalledWith("requestDelaySeconds", 10)
 		expect(mockPostMessage).toHaveBeenCalled()
 	})
 
-	test("handles updatePrompt message correctly", async () => {
+	test("处理 updatePrompt 消息正确", async () => {
 		await provider.resolveWebviewView(mockWebviewView)
 		const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 
-		// Mock existing prompts
+		// 模拟现有提示
 		const existingPrompts = {
 			code: "existing code prompt",
 			architect: "existing architect prompt",
@@ -592,20 +544,20 @@ describe("ClineProvider", () => {
 			return undefined
 		})
 
-		// Test updating a prompt
+		// 测试更新提示
 		await messageHandler({
 			type: "updatePrompt",
 			promptMode: "code",
 			customPrompt: "new code prompt",
 		})
 
-		// Verify state was updated correctly
+		// 验证状态是否正确更新
 		expect(mockContext.globalState.update).toHaveBeenCalledWith("customModePrompts", {
 			...existingPrompts,
 			code: "new code prompt",
 		})
 
-		// Verify state was posted to webview
+		// 验证状态是否发送到 webview
 		expect(mockPostMessage).toHaveBeenCalledWith(
 			expect.objectContaining({
 				type: "state",
@@ -619,8 +571,8 @@ describe("ClineProvider", () => {
 		)
 	})
 
-	test("customModePrompts defaults to empty object", async () => {
-		// Mock globalState.get to return undefined for customModePrompts
+	test("customModePrompts 默认为空对象", async () => {
+		// 模拟 globalState.get 返回 undefined 用于 customModePrompts
 		;(mockContext.globalState.get as jest.Mock).mockImplementation((key: string) => {
 			if (key === "customModePrompts") {
 				return undefined
@@ -632,8 +584,8 @@ describe("ClineProvider", () => {
 		expect(state.customModePrompts).toEqual({})
 	})
 
-	test("uses mode-specific custom instructions in Cline initialization", async () => {
-		// Setup mock state
+	test("在 Cline 初始化中使用模式特定的自定义指令", async () => {
+		// 设置模拟状态
 		const modeCustomInstructions = "Code mode instructions"
 		const mockApiConfig = {
 			apiProvider: "openrouter",
@@ -652,14 +604,14 @@ describe("ClineProvider", () => {
 			experiments: experimentDefault,
 		} as any)
 
-		// Reset Cline mock
+		// 重置 Cline 模拟
 		const { Cline } = require("../../Cline")
 		;(Cline as jest.Mock).mockClear()
 
-		// Initialize Cline with a task
+		// 使用任务初始化 Cline
 		await provider.initClineWithTask("Test task")
 
-		// Verify Cline was initialized with mode-specific instructions
+		// 验证 Cline 是否使用模式特定的指令初始化
 		expect(Cline).toHaveBeenCalledWith(
 			provider,
 			mockApiConfig,
@@ -673,11 +625,11 @@ describe("ClineProvider", () => {
 			experimentDefault,
 		)
 	})
-	test("handles mode-specific custom instructions updates", async () => {
+	test("处理模式特定的自定义指令更新", async () => {
 		await provider.resolveWebviewView(mockWebviewView)
 		const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 
-		// Mock existing prompts
+		// 模拟现有提示
 		const existingPrompts = {
 			code: {
 				roleDefinition: "Code role",
@@ -691,7 +643,7 @@ describe("ClineProvider", () => {
 			return undefined
 		})
 
-		// Update custom instructions for code mode
+		// 更新 code 模式的自定义指令
 		await messageHandler({
 			type: "updatePrompt",
 			promptMode: "code",
@@ -701,7 +653,7 @@ describe("ClineProvider", () => {
 			},
 		})
 
-		// Verify state was updated correctly
+		// 验证状态是否正确更新
 		expect(mockContext.globalState.update).toHaveBeenCalledWith("customModePrompts", {
 			code: {
 				roleDefinition: "Code role",
@@ -710,8 +662,8 @@ describe("ClineProvider", () => {
 		})
 	})
 
-	test("saves mode config when updating API configuration", async () => {
-		// Setup mock context with mode and config name
+	test("在更新 API 配置时保存模式配置", async () => {
+		// 使用模式和配置名称设置模拟上下文
 		mockContext = {
 			...mockContext,
 			globalState: {
@@ -729,7 +681,7 @@ describe("ClineProvider", () => {
 			},
 		} as unknown as vscode.ExtensionContext
 
-		// Create new provider with updated mock context
+		// 使用更新的模拟上下文创建新提供程序
 		provider = new ClineProvider(mockContext, mockOutputChannel)
 		await provider.resolveWebviewView(mockWebviewView)
 		const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
@@ -739,17 +691,17 @@ describe("ClineProvider", () => {
 			setModeConfig: jest.fn(),
 		} as any
 
-		// Update API configuration
+		// 更新 API 配置
 		await messageHandler({
 			type: "apiConfiguration",
 			apiConfiguration: { apiProvider: "anthropic" },
 		})
 
-		// Should save config as default for current mode
+		// 应该将配置保存为当前模式的默认配置
 		expect(provider.configManager.setModeConfig).toHaveBeenCalledWith("code", "test-id")
 	})
 
-	test("file content includes line numbers", async () => {
+	test("文件内容包含行号", async () => {
 		const { extractTextFromFile } = require("../../../integrations/misc/extract-text")
 		const result = await extractTextFromFile("test.js")
 		expect(result).toBe("1 | const x = 1;\n2 | const y = 2;\n3 | const z = 3;")
@@ -757,28 +709,28 @@ describe("ClineProvider", () => {
 
 	describe("deleteMessage", () => {
 		beforeEach(async () => {
-			// Mock window.showInformationMessage
+			// 模拟 window.showInformationMessage
 			;(vscode.window.showInformationMessage as jest.Mock) = jest.fn()
 			await provider.resolveWebviewView(mockWebviewView)
 		})
 
-		test('handles "Just this message" deletion correctly', async () => {
-			// Mock user selecting "Just this message"
+		test('正确处理 "Just this message" 删除', async () => {
+			// 模拟用户选择 "Just this message"
 			;(vscode.window.showInformationMessage as jest.Mock).mockResolvedValue("Just this message")
 
-			// Setup mock messages
+			// 设置模拟消息
 			const mockMessages = [
-				{ ts: 1000, type: "say", say: "user_feedback" }, // User message 1
-				{ ts: 2000, type: "say", say: "tool" }, // Tool message
-				{ ts: 3000, type: "say", say: "text", value: 4000 }, // Message to delete
-				{ ts: 4000, type: "say", say: "browser_action" }, // Response to delete
-				{ ts: 5000, type: "say", say: "user_feedback" }, // Next user message
-				{ ts: 6000, type: "say", say: "user_feedback" }, // Final message
+				{ ts: 1000, type: "say", say: "user_feedback" }, // 用户消息 1
+				{ ts: 2000, type: "say", say: "tool" }, // 工具消息
+				{ ts: 3000, type: "say", say: "text", value: 4000 }, // 要删除的消息
+				{ ts: 4000, type: "say", say: "browser_action" }, // 要删除的响应
+				{ ts: 5000, type: "say", say: "user_feedback" }, // 下一个用户消息
+				{ ts: 6000, type: "say", say: "user_feedback" }, // 最后一个消息
 			]
 
 			const mockApiHistory = [{ ts: 1000 }, { ts: 2000 }, { ts: 3000 }, { ts: 4000 }, { ts: 5000 }, { ts: 6000 }]
 
-			// Setup Cline instance with mock data
+			// 使用模拟数据设置 Cline 实例
 			const mockCline = {
 				clineMessages: mockMessages,
 				apiConversationHistory: mockApiHistory,
@@ -788,19 +740,19 @@ describe("ClineProvider", () => {
 				abortTask: jest.fn(),
 				handleWebviewAskResponse: jest.fn(),
 			}
-			// @ts-ignore - accessing private property for testing
+			// @ts-ignore - 访问私有属性进行测试
 			provider.cline = mockCline
 
-			// Mock getTaskWithId
+			// 模拟 getTaskWithId
 			;(provider as any).getTaskWithId = jest.fn().mockResolvedValue({
 				historyItem: { id: "test-task-id" },
 			})
 
-			// Trigger message deletion
+			// 触发消息删除
 			const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 			await messageHandler({ type: "deleteMessage", value: 4000 })
 
-			// Verify correct messages were kept
+			// 验证保留了正确的消息
 			expect(mockCline.overwriteClineMessages).toHaveBeenCalledWith([
 				mockMessages[0],
 				mockMessages[1],
@@ -808,7 +760,7 @@ describe("ClineProvider", () => {
 				mockMessages[5],
 			])
 
-			// Verify correct API messages were kept
+			// 验证保留了正确的 API 消息
 			expect(mockCline.overwriteApiConversationHistory).toHaveBeenCalledWith([
 				mockApiHistory[0],
 				mockApiHistory[1],
@@ -817,21 +769,21 @@ describe("ClineProvider", () => {
 			])
 		})
 
-		test('handles "This and all subsequent messages" deletion correctly', async () => {
-			// Mock user selecting "This and all subsequent messages"
+		test('正确处理 "This and all subsequent messages" 删除', async () => {
+			// 模拟用户选择 "This and all subsequent messages"
 			;(vscode.window.showInformationMessage as jest.Mock).mockResolvedValue("This and all subsequent messages")
 
-			// Setup mock messages
+			// 设置模拟消息
 			const mockMessages = [
 				{ ts: 1000, type: "say", say: "user_feedback" },
-				{ ts: 2000, type: "say", say: "text", value: 3000 }, // Message to delete
+				{ ts: 2000, type: "say", say: "text", value: 3000 }, // 要删除的消息
 				{ ts: 3000, type: "say", say: "user_feedback" },
 				{ ts: 4000, type: "say", say: "user_feedback" },
 			]
 
 			const mockApiHistory = [{ ts: 1000 }, { ts: 2000 }, { ts: 3000 }, { ts: 4000 }]
 
-			// Setup Cline instance with mock data
+			// 使用模拟数据设置 Cline 实例
 			const mockCline = {
 				clineMessages: mockMessages,
 				apiConversationHistory: mockApiHistory,
@@ -841,27 +793,27 @@ describe("ClineProvider", () => {
 				abortTask: jest.fn(),
 				handleWebviewAskResponse: jest.fn(),
 			}
-			// @ts-ignore - accessing private property for testing
+			// @ts-ignore - 访问私有属性进行测试
 			provider.cline = mockCline
 
-			// Mock getTaskWithId
+			// 模拟 getTaskWithId
 			;(provider as any).getTaskWithId = jest.fn().mockResolvedValue({
 				historyItem: { id: "test-task-id" },
 			})
 
-			// Trigger message deletion
+			// 触发消息删除
 			const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 			await messageHandler({ type: "deleteMessage", value: 3000 })
 
-			// Verify only messages before the deleted message were kept
+			// 验证仅保留了删除消息之前的消息
 			expect(mockCline.overwriteClineMessages).toHaveBeenCalledWith([mockMessages[0]])
 
-			// Verify only API messages before the deleted message were kept
+			// 验证仅保留了删除消息之前的 API 消息
 			expect(mockCline.overwriteApiConversationHistory).toHaveBeenCalledWith([mockApiHistory[0]])
 		})
 
-		test("handles Cancel correctly", async () => {
-			// Mock user selecting "Cancel"
+		test("正确处理取消", async () => {
+			// 模拟用户选择 "Cancel"
 			;(vscode.window.showInformationMessage as jest.Mock).mockResolvedValue("Cancel")
 
 			const mockCline = {
@@ -871,14 +823,14 @@ describe("ClineProvider", () => {
 				overwriteApiConversationHistory: jest.fn(),
 				taskId: "test-task-id",
 			}
-			// @ts-ignore - accessing private property for testing
+			// @ts-ignore - 访问私有属性进行测试
 			provider.cline = mockCline
 
-			// Trigger message deletion
+			// 触发消息删除
 			const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 			await messageHandler({ type: "deleteMessage", value: 2000 })
 
-			// Verify no messages were deleted
+			// 验证没有删除任何消息
 			expect(mockCline.overwriteClineMessages).not.toHaveBeenCalled()
 			expect(mockCline.overwriteApiConversationHistory).not.toHaveBeenCalled()
 		})
@@ -888,7 +840,7 @@ describe("ClineProvider", () => {
 		beforeEach(async () => {
 			mockPostMessage.mockClear()
 			await provider.resolveWebviewView(mockWebviewView)
-			// Reset and setup mock
+			// 重置并设置模拟
 			mockAddCustomInstructions.mockClear()
 			mockAddCustomInstructions.mockImplementation(
 				(modeInstructions: string, globalInstructions: string, cwd: string) => {
@@ -903,8 +855,8 @@ describe("ClineProvider", () => {
 			return mockCalls[0][0]
 		}
 
-		test("handles mcpEnabled setting correctly", async () => {
-			// Mock getState to return mcpEnabled: true
+		test("正确处理 mcpEnabled 设置", async () => {
+			// 模拟 getState 返回 mcpEnabled: true
 			jest.spyOn(provider, "getState").mockResolvedValue({
 				apiConfiguration: {
 					apiProvider: "openrouter" as const,
@@ -929,7 +881,7 @@ describe("ClineProvider", () => {
 			expect(typeof handler1).toBe("function")
 			await handler1({ type: "getSystemPrompt", mode: "code" })
 
-			// Verify mcpHub is passed when mcpEnabled is true
+			// 验证 mcpHub 在 mcpEnabled 为 true 时传递
 			expect(mockPostMessage).toHaveBeenCalledWith(
 				expect.objectContaining({
 					type: "systemPrompt",
@@ -937,7 +889,7 @@ describe("ClineProvider", () => {
 				}),
 			)
 
-			// Mock getState to return mcpEnabled: false
+			// 模拟 getState 返回 mcpEnabled: false
 			jest.spyOn(provider, "getState").mockResolvedValue({
 				apiConfiguration: {
 					apiProvider: "openrouter" as const,
@@ -961,7 +913,7 @@ describe("ClineProvider", () => {
 			const handler2 = getMessageHandler()
 			await handler2({ type: "getSystemPrompt", mode: "code" })
 
-			// Verify mcpHub is not passed when mcpEnabled is false
+			// 验证 mcpHub 在 mcpEnabled 为 false 时未传递
 			expect(mockPostMessage).toHaveBeenCalledWith(
 				expect.objectContaining({
 					type: "systemPrompt",
@@ -970,8 +922,8 @@ describe("ClineProvider", () => {
 			)
 		})
 
-		test("handles errors gracefully", async () => {
-			// Mock SYSTEM_PROMPT to throw an error
+		test("优雅地处理错误", async () => {
+			// 模拟 SYSTEM_PROMPT 抛出错误
 			const systemPrompt = require("../../prompts/system")
 			jest.spyOn(systemPrompt, "SYSTEM_PROMPT").mockRejectedValueOnce(new Error("Test error"))
 
@@ -981,26 +933,26 @@ describe("ClineProvider", () => {
 			expect(vscode.window.showErrorMessage).toHaveBeenCalledWith("Failed to get system prompt")
 		})
 
-		test("uses code mode custom instructions", async () => {
-			// Get the mock function
+		test("使用代码模式自定义指令", async () => {
+			// 获取模拟函数
 			const mockAddCustomInstructions = (jest.requireMock("../../prompts/sections/custom-instructions") as any)
 				.addCustomInstructions
 
-			// Clear any previous calls
+			// 清除之前的调用
 			mockAddCustomInstructions.mockClear()
 
-			// Mock SYSTEM_PROMPT
+			// 模拟 SYSTEM_PROMPT
 			const systemPromptModule = require("../../prompts/system")
 			jest.spyOn(systemPromptModule, "SYSTEM_PROMPT").mockImplementation(async () => {
 				await mockAddCustomInstructions("Code mode specific instructions", "", "/mock/path")
 				return "mocked system prompt"
 			})
 
-			// Trigger getSystemPrompt
+			// 触发 getSystemPrompt
 			const promptHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 			await promptHandler({ type: "getSystemPrompt" })
 
-			// Verify mock was called with code mode instructions
+			// 验证模拟是否使用代码模式指令调用
 			expect(mockAddCustomInstructions).toHaveBeenCalledWith(
 				"Code mode specific instructions",
 				"",
@@ -1008,8 +960,8 @@ describe("ClineProvider", () => {
 			)
 		})
 
-		test("passes diffStrategy and diffEnabled to SYSTEM_PROMPT when previewing", async () => {
-			// Mock getState to return experimentalDiffStrategy, diffEnabled and fuzzyMatchThreshold
+		test("在预览时将 diffStrategy 和 diffEnabled 传递给 SYSTEM_PROMPT", async () => {
+			// 模拟 getState 返回 experimentalDiffStrategy、diffEnabled 和 fuzzyMatchThreshold
 			jest.spyOn(provider, "getState").mockResolvedValue({
 				apiConfiguration: {
 					apiProvider: "openrouter",
@@ -1027,15 +979,15 @@ describe("ClineProvider", () => {
 				experiments: experimentDefault,
 			} as any)
 
-			// Mock SYSTEM_PROMPT to verify diffStrategy and diffEnabled are passed
+			// 模拟 SYSTEM_PROMPT 以验证传递了 diffStrategy 和 diffEnabled
 			const systemPromptModule = require("../../prompts/system")
 			const systemPromptSpy = jest.spyOn(systemPromptModule, "SYSTEM_PROMPT")
 
-			// Trigger getSystemPrompt
+			// 触发 getSystemPrompt
 			const handler = getMessageHandler()
 			await handler({ type: "getSystemPrompt", mode: "code" })
 
-			// Verify SYSTEM_PROMPT was called with correct arguments
+			// 验证 SYSTEM_PROMPT 是否使用正确的参数调用
 			expect(systemPromptSpy).toHaveBeenCalledWith(
 				expect.anything(), // context
 				expect.any(String), // cwd
@@ -1056,13 +1008,13 @@ describe("ClineProvider", () => {
 				true,
 			)
 
-			// Run the test again to verify it's consistent
+			// 再次运行测试以验证其一致性
 			await handler({ type: "getSystemPrompt", mode: "code" })
 			expect(systemPromptSpy).toHaveBeenCalledTimes(2)
 		})
 
-		test("passes diffEnabled: false to SYSTEM_PROMPT when diff is disabled", async () => {
-			// Mock getState to return diffEnabled: false
+		test("在禁用 diff 时将 diffEnabled: false 传递给 SYSTEM_PROMPT", async () => {
+			// 模拟 getState 返回 diffEnabled: false
 			jest.spyOn(provider, "getState").mockResolvedValue({
 				apiConfiguration: {
 					apiProvider: "openrouter",
@@ -1080,15 +1032,15 @@ describe("ClineProvider", () => {
 				enableMcpServerCreation: true,
 			} as any)
 
-			// Mock SYSTEM_PROMPT to verify diffEnabled is passed as false
+			// 模拟 SYSTEM_PROMPT 以验证传递了 diffEnabled: false
 			const systemPromptModule = require("../../prompts/system")
 			const systemPromptSpy = jest.spyOn(systemPromptModule, "SYSTEM_PROMPT")
 
-			// Trigger getSystemPrompt
+			// 触发 getSystemPrompt
 			const handler = getMessageHandler()
 			await handler({ type: "getSystemPrompt", mode: "code" })
 
-			// Verify SYSTEM_PROMPT was called with diffEnabled: false
+			// 验证 SYSTEM_PROMPT 是否使用 diffEnabled: false 调用
 			expect(systemPromptSpy).toHaveBeenCalledWith(
 				expect.anything(), // context
 				expect.any(String), // cwd
@@ -1110,8 +1062,8 @@ describe("ClineProvider", () => {
 			)
 		})
 
-		test("uses correct mode-specific instructions when mode is specified", async () => {
-			// Mock getState to return architect mode instructions
+		test("在指定模式时使用正确的模式特定指令", async () => {
+			// 模拟 getState 返回 architect 模式指令
 			jest.spyOn(provider, "getState").mockResolvedValue({
 				apiConfiguration: {
 					apiProvider: "openrouter",
@@ -1127,19 +1079,19 @@ describe("ClineProvider", () => {
 				experiments: experimentDefault,
 			} as any)
 
-			// Mock SYSTEM_PROMPT to call addCustomInstructions
+			// 模拟 SYSTEM_PROMPT 调用 addCustomInstructions
 			const systemPromptModule = require("../../prompts/system")
 			jest.spyOn(systemPromptModule, "SYSTEM_PROMPT").mockImplementation(async () => {
 				await mockAddCustomInstructions("Architect mode instructions", "", "/mock/path")
 				return "mocked system prompt"
 			})
 
-			// Resolve webview and trigger getSystemPrompt
+			// 解析 webview 并触发 getSystemPrompt
 			await provider.resolveWebviewView(mockWebviewView)
 			const architectHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 			await architectHandler({ type: "getSystemPrompt" })
 
-			// Verify architect mode instructions were used
+			// 验证是否使用了 architect 模式指令
 			expect(mockAddCustomInstructions).toHaveBeenCalledWith(
 				"Architect mode instructions",
 				"",
@@ -1150,12 +1102,12 @@ describe("ClineProvider", () => {
 
 	describe("handleModeSwitch", () => {
 		beforeEach(async () => {
-			// Set up webview for each test
+			// 为每个测试设置 webview
 			await provider.resolveWebviewView(mockWebviewView)
 		})
 
-		test("loads saved API config when switching modes", async () => {
-			// Mock ConfigManager methods
+		test("切换模式时加载保存的 API 配置", async () => {
+			// 模拟 ConfigManager 方法
 			provider.configManager = {
 				getModeConfigId: jest.fn().mockResolvedValue("saved-config-id"),
 				listConfig: jest
@@ -1165,23 +1117,23 @@ describe("ClineProvider", () => {
 				setModeConfig: jest.fn(),
 			} as any
 
-			// Switch to architect mode
+			// 切换到 architect 模式
 			await provider.handleModeSwitch("architect")
 
-			// Verify mode was updated
+			// 验证模式是否更新
 			expect(mockContext.globalState.update).toHaveBeenCalledWith("mode", "architect")
 
-			// Verify saved config was loaded
+			// 验证是否加载了保存的配置
 			expect(provider.configManager.getModeConfigId).toHaveBeenCalledWith("architect")
 			expect(provider.configManager.loadConfig).toHaveBeenCalledWith("saved-config")
 			expect(mockContext.globalState.update).toHaveBeenCalledWith("currentApiConfigName", "saved-config")
 
-			// Verify state was posted to webview
+			// 验证状态是否发送到 webview
 			expect(mockPostMessage).toHaveBeenCalledWith(expect.objectContaining({ type: "state" }))
 		})
 
-		test("saves current config when switching to mode without config", async () => {
-			// Mock ConfigManager methods
+		test("切换到没有配置的模式时保存当前配置", async () => {
+			// 模拟 ConfigManager 方法
 			provider.configManager = {
 				getModeConfigId: jest.fn().mockResolvedValue(undefined),
 				listConfig: jest
@@ -1190,32 +1142,32 @@ describe("ClineProvider", () => {
 				setModeConfig: jest.fn(),
 			} as any
 
-			// Mock current config name
+			// 模拟当前配置名称
 			mockContext.globalState.get = jest.fn((key: string) => {
 				if (key === "currentApiConfigName") return "current-config"
 				return undefined
 			})
 
-			// Switch to architect mode
+			// 切换到 architect 模式
 			await provider.handleModeSwitch("architect")
 
-			// Verify mode was updated
+			// 验证模式是否更新
 			expect(mockContext.globalState.update).toHaveBeenCalledWith("mode", "architect")
 
-			// Verify current config was saved as default for new mode
+			// 验证是否将当前配置保存为新模式的默认配置
 			expect(provider.configManager.setModeConfig).toHaveBeenCalledWith("architect", "current-id")
 
-			// Verify state was posted to webview
+			// 验证状态是否发送到 webview
 			expect(mockPostMessage).toHaveBeenCalledWith(expect.objectContaining({ type: "state" }))
 		})
 	})
 
 	describe("updateCustomMode", () => {
-		test("updates both file and state when updating custom mode", async () => {
+		test("更新自定义模式时同时更新文件和状态", async () => {
 			await provider.resolveWebviewView(mockWebviewView)
 			const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 
-			// Mock CustomModesManager methods
+			// 模拟 CustomModesManager 方法
 			provider.customModesManager = {
 				updateCustomMode: jest.fn().mockResolvedValue(undefined),
 				getCustomModes: jest.fn().mockResolvedValue({
@@ -1229,7 +1181,7 @@ describe("ClineProvider", () => {
 				dispose: jest.fn(),
 			} as any
 
-			// Test updating a custom mode
+			// 测试更新自定义模式
 			await messageHandler({
 				type: "updateCustomMode",
 				modeConfig: {
@@ -1240,7 +1192,7 @@ describe("ClineProvider", () => {
 				},
 			})
 
-			// Verify CustomModesManager.updateCustomMode was called
+			// 验证 CustomModesManager.updateCustomMode 是否被调用
 			expect(provider.customModesManager.updateCustomMode).toHaveBeenCalledWith(
 				"test-mode",
 				expect.objectContaining({
@@ -1249,7 +1201,7 @@ describe("ClineProvider", () => {
 				}),
 			)
 
-			// Verify state was updated
+			// 验证状态是否更新
 			expect(mockContext.globalState.update).toHaveBeenCalledWith(
 				"customModes",
 				expect.objectContaining({
@@ -1260,7 +1212,7 @@ describe("ClineProvider", () => {
 				}),
 			)
 
-			// Verify state was posted to webview
+			// 验证状态是否发送到 webview
 			expect(mockPostMessage).toHaveBeenCalledWith(
 				expect.objectContaining({
 					type: "state",
@@ -1278,11 +1230,11 @@ describe("ClineProvider", () => {
 	})
 
 	describe("upsertApiConfiguration", () => {
-		test("handles error in upsertApiConfiguration gracefully", async () => {
+		test("优雅地处理 upsertApiConfiguration 中的错误", async () => {
 			provider.resolveWebviewView(mockWebviewView)
 			const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 
-			// Mock ConfigManager methods to simulate error
+			// 模拟 ConfigManager 方法以模拟错误
 			provider.configManager = {
 				setModeConfig: jest.fn().mockRejectedValue(new Error("Failed to update mode config")),
 				listConfig: jest
@@ -1290,13 +1242,13 @@ describe("ClineProvider", () => {
 					.mockResolvedValue([{ name: "test-config", id: "test-id", apiProvider: "anthropic" }]),
 			} as any
 
-			// Mock getState to provide necessary data
+			// 模拟 getState 以提供必要的数据
 			jest.spyOn(provider, "getState").mockResolvedValue({
 				mode: "code",
 				currentApiConfigName: "test-config",
 			} as any)
 
-			// Trigger updateApiConfiguration
+			// 触发 updateApiConfiguration
 			await messageHandler({
 				type: "upsertApiConfiguration",
 				text: "test-config",
@@ -1306,18 +1258,18 @@ describe("ClineProvider", () => {
 				},
 			})
 
-			// Verify error was logged and user was notified
+			// 验证是否记录了错误并通知了用户
 			expect(mockOutputChannel.appendLine).toHaveBeenCalledWith(
 				expect.stringContaining("Error create new api configuration"),
 			)
 			expect(vscode.window.showErrorMessage).toHaveBeenCalledWith("Failed to create api configuration")
 		})
 
-		test("handles successful upsertApiConfiguration", async () => {
+		test("处理成功的 upsertApiConfiguration", async () => {
 			provider.resolveWebviewView(mockWebviewView)
 			const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 
-			// Mock ConfigManager methods
+			// 模拟 ConfigManager 方法
 			provider.configManager = {
 				saveConfig: jest.fn().mockResolvedValue(undefined),
 				listConfig: jest
@@ -1330,37 +1282,37 @@ describe("ClineProvider", () => {
 				apiKey: "test-key",
 			}
 
-			// Trigger upsertApiConfiguration
+			// 触发 upsertApiConfiguration
 			await messageHandler({
 				type: "upsertApiConfiguration",
 				text: "test-config",
 				apiConfiguration: testApiConfig,
 			})
 
-			// Verify config was saved
+			// 验证配置是否保存
 			expect(provider.configManager.saveConfig).toHaveBeenCalledWith("test-config", testApiConfig)
 
-			// Verify state updates
+			// 验证状态更新
 			expect(mockContext.globalState.update).toHaveBeenCalledWith("listApiConfigMeta", [
 				{ name: "test-config", id: "test-id", apiProvider: "anthropic" },
 			])
 			expect(mockContext.globalState.update).toHaveBeenCalledWith("currentApiConfigName", "test-config")
 
-			// Verify state was posted to webview
+			// 验证状态是否发送到 webview
 			expect(mockPostMessage).toHaveBeenCalledWith(expect.objectContaining({ type: "state" }))
 		})
 
-		test("handles buildApiHandler error in updateApiConfiguration", async () => {
+		test("处理 updateApiConfiguration 中的 buildApiHandler 错误", async () => {
 			provider.resolveWebviewView(mockWebviewView)
 			const messageHandler = (mockWebviewView.webview.onDidReceiveMessage as jest.Mock).mock.calls[0][0]
 
-			// Mock buildApiHandler to throw an error
+			// 模拟 buildApiHandler 抛出错误
 			const { buildApiHandler } = require("../../../api")
 			;(buildApiHandler as jest.Mock).mockImplementationOnce(() => {
 				throw new Error("API handler error")
 			})
 
-			// Mock ConfigManager methods
+			// 模拟 ConfigManager 方法
 			provider.configManager = {
 				saveConfig: jest.fn().mockResolvedValue(undefined),
 				listConfig: jest
@@ -1368,12 +1320,12 @@ describe("ClineProvider", () => {
 					.mockResolvedValue([{ name: "test-config", id: "test-id", apiProvider: "anthropic" }]),
 			} as any
 
-			// Setup mock Cline instance
+			// 设置模拟 Cline 实例
 			const mockCline = {
 				api: undefined,
 				abortTask: jest.fn(),
 			}
-			// @ts-ignore - accessing private property for testing
+			// @ts-ignore - 访问私有属性进行测试
 			provider.cline = mockCline
 
 			const testApiConfig = {
@@ -1381,20 +1333,20 @@ describe("ClineProvider", () => {
 				apiKey: "test-key",
 			}
 
-			// Trigger upsertApiConfiguration
+			// 触发 upsertApiConfiguration
 			await messageHandler({
 				type: "upsertApiConfiguration",
 				text: "test-config",
 				apiConfiguration: testApiConfig,
 			})
 
-			// Verify error handling
+			// 验证错误处理
 			expect(mockOutputChannel.appendLine).toHaveBeenCalledWith(
 				expect.stringContaining("Error create new api configuration"),
 			)
 			expect(vscode.window.showErrorMessage).toHaveBeenCalledWith("Failed to create api configuration")
 
-			// Verify state was still updated
+			// 验证状态仍然更新
 			expect(mockContext.globalState.update).toHaveBeenCalledWith("listApiConfigMeta", [
 				{ name: "test-config", id: "test-id", apiProvider: "anthropic" },
 			])

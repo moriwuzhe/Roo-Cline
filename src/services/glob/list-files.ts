@@ -1,20 +1,20 @@
-import { globby, Options } from "globby"
-import os from "os"
-import * as path from "path"
-import { arePathsEqual } from "../../utils/path"
+import { globby, Options } from "globby" // 导入 globby 和 Options 模块
+import os from "os" // 导入 os 模块
+import * as path from "path" // 导入 path 模块
+import { arePathsEqual } from "../../utils/path" // 导入 arePathsEqual 函数
 
 export async function listFiles(dirPath: string, recursive: boolean, limit: number): Promise<[string[], boolean]> {
-	const absolutePath = path.resolve(dirPath)
-	// Do not allow listing files in root or home directory, which cline tends to want to do when the user's prompt is vague.
-	const root = process.platform === "win32" ? path.parse(absolutePath).root : "/"
-	const isRoot = arePathsEqual(absolutePath, root)
+	const absolutePath = path.resolve(dirPath) // 将 dirPath 解析为绝对路径
+	// 不允许列出根目录或主目录中的文件，当用户的提示不明确时，cline 往往会这样做。
+	const root = process.platform === "win32" ? path.parse(absolutePath).root : "/" // 获取根目录
+	const isRoot = arePathsEqual(absolutePath, root) // 检查是否为根目录
 	if (isRoot) {
-		return [[root], false]
+		return [[root], false] // 如果是根目录，返回根目录路径和 false
 	}
-	const homeDir = os.homedir()
-	const isHomeDir = arePathsEqual(absolutePath, homeDir)
+	const homeDir = os.homedir() // 获取主目录
+	const isHomeDir = arePathsEqual(absolutePath, homeDir) // 检查是否为主目录
 	if (isHomeDir) {
-		return [[homeDir], false]
+		return [[homeDir], false] // 如果是主目录，返回主目录路径和 false
 	}
 
 	const dirsToIgnore = [
@@ -33,65 +33,55 @@ export async function listFiles(dirPath: string, recursive: boolean, limit: numb
 		"deps",
 		"pkg",
 		"Pods",
-		".*", // '!**/.*' excludes hidden directories, while '!**/.*/**' excludes only their contents. This way we are at least aware of the existence of hidden directories.
-	].map((dir) => `**/${dir}/**`)
+		".*", // '!**/.*' 排除隐藏目录，而 '!**/.*/**' 仅排除其内容。这样我们至少可以知道隐藏目录的存在。
+	].map((dir) => `**/${dir}/**`) // 将目录映射为 glob 模式
 
 	const options = {
-		cwd: dirPath,
-		dot: true, // do not ignore hidden files/directories
-		absolute: true,
-		markDirectories: true, // Append a / on any directories matched (/ is used on windows as well, so dont use path.sep)
-		gitignore: recursive, // globby ignores any files that are gitignored
-		ignore: recursive ? dirsToIgnore : undefined, // just in case there is no gitignore, we ignore sensible defaults
-		onlyFiles: false, // true by default, false means it will list directories on their own too
+		cwd: dirPath, // 设置当前工作目录
+		dot: true, // 不忽略隐藏文件/目录
+		absolute: true, // 返回绝对路径
+		markDirectories: true, // 在匹配的目录后面添加 /
+		gitignore: recursive, // globby 忽略任何被 gitignore 忽略的文件
+		ignore: recursive ? dirsToIgnore : undefined, // 如果没有 gitignore，我们忽略默认的目录
+		onlyFiles: false, // 默认为 true，false 表示它也会列出单独的目录
 	}
-	// * globs all files in one dir, ** globs files in nested directories
-	const files = recursive ? await globbyLevelByLevel(limit, options) : (await globby("*", options)).slice(0, limit)
-	return [files, files.length >= limit]
+	// * 匹配一个目录中的所有文件，** 匹配嵌套目录中的文件
+	const files = recursive ? await globbyLevelByLevel(limit, options) : (await globby("*", options)).slice(0, limit) // 根据是否递归列出文件
+	return [files, files.length >= limit] // 返回文件列表和是否达到限制
+
 }
 
-/*
-Breadth-first traversal of directory structure level by level up to a limit:
-   - Queue-based approach ensures proper breadth-first traversal
-   - Processes directory patterns level by level
-   - Captures a representative sample of the directory structure up to the limit
-   - Minimizes risk of missing deeply nested files
-
-- Notes:
-   - Relies on globby to mark directories with /
-   - Potential for loops if symbolic links reference back to parent (we could use followSymlinks: false but that may not be ideal for some projects and it's pointless if they're not using symlinks wrong)
-   - Timeout mechanism prevents infinite loops
-*/
+// 广度优先遍历目录结构，逐级遍历直到达到限制：
 async function globbyLevelByLevel(limit: number, options?: Options) {
-	let results: Set<string> = new Set()
-	let queue: string[] = ["*"]
+	let results: Set<string> = new Set() // 使用 Set 存储结果，避免重复
+	let queue: string[] = ["*"] // 初始化队列，开始模式为 *
 
 	const globbingProcess = async () => {
-		while (queue.length > 0 && results.size < limit) {
-			const pattern = queue.shift()!
-			const filesAtLevel = await globby(pattern, options)
+		while (queue.length > 0 && results.size < limit) { // 当队列不为空且结果数量小于限制时
+			const pattern = queue.shift()! // 从队列中取出一个模式
+			const filesAtLevel = await globby(pattern, options) // 使用 globby 获取匹配的文件
 
 			for (const file of filesAtLevel) {
 				if (results.size >= limit) {
-					break
+					break // 如果结果数量达到限制，跳出循环
 				}
-				results.add(file)
+				results.add(file) // 将文件添加到结果集中
 				if (file.endsWith("/")) {
-					queue.push(`${file}*`)
+					queue.push(`${file}*`) // 如果是目录，将其子目录添加到队列中
 				}
 			}
 		}
-		return Array.from(results).slice(0, limit)
+		return Array.from(results).slice(0, limit) // 返回结果集的数组形式，限制数量
 	}
 
-	// Timeout after 10 seconds and return partial results
+	// 10 秒后超时并返回部分结果
 	const timeoutPromise = new Promise<string[]>((_, reject) => {
-		setTimeout(() => reject(new Error("Globbing timeout")), 10_000)
+		setTimeout(() => reject(new Error("Globbing timeout")), 10_000) // 设置超时
 	})
 	try {
-		return await Promise.race([globbingProcess(), timeoutPromise])
+		return await Promise.race([globbingProcess(), timeoutPromise]) // 竞赛执行 globbingProcess 和 timeoutPromise
 	} catch (error) {
-		console.warn("Globbing timed out, returning partial results")
-		return Array.from(results)
+		console.warn("Globbing timed out, returning partial results") // 捕获超时错误并警告
+		return Array.from(results) // 返回部分结果
 	}
 }

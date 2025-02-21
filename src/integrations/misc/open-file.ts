@@ -1,58 +1,58 @@
-import * as path from "path"
-import * as os from "os"
-import * as vscode from "vscode"
-import { arePathsEqual } from "../../utils/path"
+import * as path from "path" // 导入 path 模块，用于路径操作
+import * as os from "os" // 导入 os 模块，用于操作系统相关操作
+import * as vscode from "vscode" // 导入 VSCode 模块
+import { arePathsEqual } from "../../utils/path" // 导入路径比较工具函数
 
 export async function openImage(dataUri: string) {
-	const matches = dataUri.match(/^data:image\/([a-zA-Z]+);base64,(.+)$/)
+	const matches = dataUri.match(/^data:image\/([a-zA-Z]+);base64,(.+)$/) // 匹配 data URI 格式
 	if (!matches) {
-		vscode.window.showErrorMessage("Invalid data URI format")
+		vscode.window.showErrorMessage("Invalid data URI format") // 显示错误消息
 		return
 	}
-	const [, format, base64Data] = matches
-	const imageBuffer = Buffer.from(base64Data, "base64")
-	const tempFilePath = path.join(os.tmpdir(), `temp_image_${Date.now()}.${format}`)
+	const [, format, base64Data] = matches // 解构匹配结果
+	const imageBuffer = Buffer.from(base64Data, "base64") // 将 base64 数据转换为缓冲区
+	const tempFilePath = path.join(os.tmpdir(), `temp_image_${Date.now()}.${format}`) // 构建临时文件路径
 	try {
-		await vscode.workspace.fs.writeFile(vscode.Uri.file(tempFilePath), imageBuffer)
-		await vscode.commands.executeCommand("vscode.open", vscode.Uri.file(tempFilePath))
+		await vscode.workspace.fs.writeFile(vscode.Uri.file(tempFilePath), imageBuffer) // 写入临时文件
+		await vscode.commands.executeCommand("vscode.open", vscode.Uri.file(tempFilePath)) // 打开临时文件
 	} catch (error) {
-		vscode.window.showErrorMessage(`Error opening image: ${error}`)
+		vscode.window.showErrorMessage(`Error opening image: ${error}`) // 显示错误消息
 	}
 }
 
 interface OpenFileOptions {
-	create?: boolean
-	content?: string
+	create?: boolean // 是否创建文件
+	content?: string // 文件内容
 }
 
 export async function openFile(filePath: string, options: OpenFileOptions = {}) {
 	try {
-		// Get workspace root
+		// 获取工作区根目录
 		const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath
 		if (!workspaceRoot) {
-			throw new Error("No workspace root found")
+			throw new Error("No workspace root found") // 抛出错误
 		}
 
-		// If path starts with ./, resolve it relative to workspace root
+		// 如果路径以 ./ 开头，则相对于工作区根目录解析
 		const fullPath = filePath.startsWith("./") ? path.join(workspaceRoot, filePath.slice(2)) : filePath
 
-		const uri = vscode.Uri.file(fullPath)
+		const uri = vscode.Uri.file(fullPath) // 创建文件 URI
 
-		// Check if file exists
+		// 检查文件是否存在
 		try {
 			await vscode.workspace.fs.stat(uri)
 		} catch {
-			// File doesn't exist
+			// 文件不存在
 			if (!options.create) {
-				throw new Error("File does not exist")
+				throw new Error("File does not exist") // 抛出错误
 			}
 
-			// Create with provided content or empty string
+			// 使用提供的内容或空字符串创建文件
 			const content = options.content || ""
 			await vscode.workspace.fs.writeFile(uri, Buffer.from(content, "utf8"))
 		}
 
-		// Check if the document is already open in a tab group that's not in the active editor's column
+		// 检查文档是否已在活动编辑器的列中打开
 		try {
 			for (const group of vscode.window.tabGroups.all) {
 				const existingTab = group.tabs.find(
@@ -70,15 +70,15 @@ export async function openFile(filePath: string, options: OpenFileOptions = {}) 
 					break
 				}
 			}
-		} catch {} // not essential, sometimes tab operations fail
+		} catch {} // 非必要操作，有时标签操作会失败
 
-		const document = await vscode.workspace.openTextDocument(uri)
-		await vscode.window.showTextDocument(document, { preview: false })
+		const document = await vscode.workspace.openTextDocument(uri) // 打开文本文档
+		await vscode.window.showTextDocument(document, { preview: false }) // 显示文本文档
 	} catch (error) {
 		if (error instanceof Error) {
-			vscode.window.showErrorMessage(`Could not open file: ${error.message}`)
+			vscode.window.showErrorMessage(`Could not open file: ${error.message}`) // 显示错误消息
 		} else {
-			vscode.window.showErrorMessage(`Could not open file!`)
+			vscode.window.showErrorMessage(`Could not open file!`) // 显示错误消息
 		}
 	}
 }

@@ -11,17 +11,18 @@ import { ModelInfo } from "../../shared/api"
  * @param {number} fracToRemove - The fraction (between 0 and 1) of messages (excluding the first) to remove.
  * @returns {Anthropic.Messages.MessageParam[]} The truncated conversation messages.
  */
+// 定义一个函数，用于截断对话
 export function truncateConversation(
-	messages: Anthropic.Messages.MessageParam[],
-	fracToRemove: number,
+	messages: Anthropic.Messages.MessageParam[], // 消息数组
+	fracToRemove: number, // 要移除的比例
 ): Anthropic.Messages.MessageParam[] {
-	const truncatedMessages = [messages[0]]
-	const rawMessagesToRemove = Math.floor((messages.length - 1) * fracToRemove)
-	const messagesToRemove = rawMessagesToRemove - (rawMessagesToRemove % 2)
-	const remainingMessages = messages.slice(messagesToRemove + 1)
-	truncatedMessages.push(...remainingMessages)
+	const truncatedMessages = [messages[0]] // 保留第一条消息
+	const rawMessagesToRemove = Math.floor((messages.length - 1) * fracToRemove) // 计算要移除的消息数量
+	const messagesToRemove = rawMessagesToRemove - (rawMessagesToRemove % 2) // 确保要移除的消息数量为偶数
+	const remainingMessages = messages.slice(messagesToRemove + 1) // 获取剩余的消息
+	truncatedMessages.push(...remainingMessages) // 将剩余的消息添加到截断后的消息数组中
 
-	return truncatedMessages
+	return truncatedMessages // 返回截断后的消息数组
 }
 
 /**

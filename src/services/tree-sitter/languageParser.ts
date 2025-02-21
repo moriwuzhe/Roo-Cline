@@ -22,12 +22,14 @@ export interface LanguageParser {
 	}
 }
 
+// 异步加载指定语言的 WASM 文件
 async function loadLanguage(langName: string) {
 	return await Parser.Language.load(path.join(__dirname, `tree-sitter-${langName}.wasm`))
 }
 
 let isParserInitialized = false
 
+// 初始化解析器，只需初始化一次
 async function initializeParser() {
 	if (!isParserInitialized) {
 		await Parser.init()
@@ -36,26 +38,18 @@ async function initializeParser() {
 }
 
 /*
-Using node bindings for tree-sitter is problematic in vscode extensions 
-because of incompatibility with electron. Going the .wasm route has the 
-advantage of not having to build for multiple architectures.
+使用 tree-sitter 的 node 绑定在 vscode 扩展中存在问题，因为与 electron 不兼容。
+使用 .wasm 路径的优势在于不需要为多个架构构建。
 
-We use web-tree-sitter and tree-sitter-wasms which provides auto-updating prebuilt WASM binaries for tree-sitter's language parsers.
+我们使用 web-tree-sitter 和 tree-sitter-wasms，它们提供了 tree-sitter 语言解析器的自动更新预构建 WASM 二进制文件。
 
-This function loads WASM modules for relevant language parsers based on input files:
-1. Extracts unique file extensions
-2. Maps extensions to language names
-3. Loads corresponding WASM files (containing grammar rules)
-4. Uses WASM modules to initialize tree-sitter parsers
+此函数根据输入文件加载相关语言解析器的 WASM 模块：
+1. 提取唯一的文件扩展名
+2. 将扩展名映射到语言名称
+3. 加载相应的 WASM 文件（包含语法规则）
+4. 使用 WASM 模块初始化 tree-sitter 解析器
 
-This approach optimizes performance by loading only necessary parsers once for all relevant files.
-
-Sources:
-- https://github.com/tree-sitter/node-tree-sitter/issues/169
-- https://github.com/tree-sitter/node-tree-sitter/issues/168
-- https://github.com/Gregoor/tree-sitter-wasms/blob/main/README.md
-- https://github.com/tree-sitter/tree-sitter/blob/master/lib/binding_web/README.md
-- https://github.com/tree-sitter/tree-sitter/blob/master/lib/binding_web/test/query-test.js
+这种方法通过仅为所有相关文件加载必要的解析器来优化性能。
 */
 export async function loadRequiredLanguageParsers(filesToParse: string[]): Promise<LanguageParser> {
 	await initializeParser()

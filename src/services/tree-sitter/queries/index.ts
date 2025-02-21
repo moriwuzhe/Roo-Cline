@@ -1,12 +1,12 @@
-export { default as phpQuery } from "./php"
-export { default as typescriptQuery } from "./typescript"
-export { default as pythonQuery } from "./python"
-export { default as javascriptQuery } from "./javascript"
-export { default as javaQuery } from "./java"
-export { default as rustQuery } from "./rust"
-export { default as rubyQuery } from "./ruby"
-export { default as cppQuery } from "./cpp"
-export { default as cQuery } from "./c"
-export { default as csharpQuery } from "./c-sharp"
-export { default as goQuery } from "./go"
-export { default as swiftQuery } from "./swift"
+export { default as phpQuery } from "./php" // 导出 PHP 查询
+export { default as typescriptQuery } from "./typescript" // 导出 TypeScript 查询
+export { default as pythonQuery } from "./python" // 导出 Python 查询
+export { default as javascriptQuery } from "./javascript" // 导出 JavaScript 查询
+export { default as javaQuery } from "./java" // 导出 Java 查询
+export { default as rustQuery } from "./rust" // 导出 Rust 查询
+export { default as rubyQuery } from "./ruby" // 导出 Ruby 查询
+export { default as cppQuery } from "./cpp" // 导出 C++ 查询
+export { default as cQuery } from "./c" // 导出 C 查询
+export { default as csharpQuery } from "./c-sharp" // 导出 C# 查询
+export { default as goQuery } from "./go" // 导出 Go 查询
+export { default as swiftQuery } from "./swift" // 导出 Swift 查询

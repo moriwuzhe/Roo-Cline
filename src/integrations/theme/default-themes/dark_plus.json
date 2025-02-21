@@ -1,193 +1,193 @@
 {
-	"$schema": "vscode://schemas/color-theme",
-	"name": "Dark+",
-	"include": "./dark_vs.json",
+	"$schema": "vscode://schemas/color-theme", // 颜色主题的模式
+	"name": "Dark+", // 主题名称
+	"include": "./dark_vs.json", // 包含的基础主题
 	"tokenColors": [
 		{
-			"name": "Function declarations",
+			"name": "Function declarations", // 函数声明
 			"scope": [
-				"entity.name.function",
-				"support.function",
-				"support.constant.handlebars",
-				"source.powershell variable.other.member",
-				"entity.name.operator.custom-literal"
+				"entity.name.function", // 函数名称
+				"support.function", // 支持函数
+				"support.constant.handlebars", // 支持常量 handlebars
+				"source.powershell variable.other.member", // PowerShell 源代码中的其他成员变量
+				"entity.name.operator.custom-literal" // 自定义字面量操作符名称
 			],
 			"settings": {
-				"foreground": "#DCDCAA"
+				"foreground": "#DCDCAA" // 前景颜色
 			}
 		},
 		{
-			"name": "Types declaration and references",
+			"name": "Types declaration and references", // 类型声明和引用
 			"scope": [
-				"support.class",
-				"support.type",
-				"entity.name.type",
-				"entity.name.namespace",
-				"entity.other.attribute",
-				"entity.name.scope-resolution",
-				"entity.name.class",
-				"storage.type.numeric.go",
-				"storage.type.byte.go",
-				"storage.type.boolean.go",
-				"storage.type.string.go",
-				"storage.type.uintptr.go",
-				"storage.type.error.go",
-				"storage.type.rune.go",
-				"storage.type.cs",
-				"storage.type.generic.cs",
-				"storage.type.modifier.cs",
-				"storage.type.variable.cs",
-				"storage.type.annotation.java",
-				"storage.type.generic.java",
-				"storage.type.java",
-				"storage.type.object.array.java",
-				"storage.type.primitive.array.java",
-				"storage.type.primitive.java",
-				"storage.type.token.java",
-				"storage.type.groovy",
-				"storage.type.annotation.groovy",
-				"storage.type.parameters.groovy",
-				"storage.type.generic.groovy",
-				"storage.type.object.array.groovy",
-				"storage.type.primitive.array.groovy",
-				"storage.type.primitive.groovy"
+				"support.class", // 支持类
+				"support.type", // 支持类型
+				"entity.name.type", // 类型名称
+				"entity.name.namespace", // 命名空间名称
+				"entity.other.attribute", // 其他属性
+				"entity.name.scope-resolution", // 作用域解析名称
+				"entity.name.class", // 类名称
+				"storage.type.numeric.go", // Go 语言中的数值类型
+				"storage.type.byte.go", // Go 语言中的字节类型
+				"storage.type.boolean.go", // Go 语言中的布尔类型
+				"storage.type.string.go", // Go 语言中的字符串类型
+				"storage.type.uintptr.go", // Go 语言中的 uintptr 类型
+				"storage.type.error.go", // Go 语言中的错误类型
+				"storage.type.rune.go", // Go 语言中的 rune 类型
+				"storage.type.cs", // C# 语言中的类型
+				"storage.type.generic.cs", // C# 语言中的泛型类型
+				"storage.type.modifier.cs", // C# 语言中的修饰符类型
+				"storage.type.variable.cs", // C# 语言中的变量类型
+				"storage.type.annotation.java", // Java 语言中的注解类型
+				"storage.type.generic.java", // Java 语言中的泛型类型
+				"storage.type.java", // Java 语言中的类型
+				"storage.type.object.array.java", // Java 语言中的对象数组类型
+				"storage.type.primitive.array.java", // Java 语言中的原始数组类型
+				"storage.type.primitive.java", // Java 语言中的原始类型
+				"storage.type.token.java", // Java 语言中的令牌类型
+				"storage.type.groovy", // Groovy 语言中的类型
+				"storage.type.annotation.groovy", // Groovy 语言中的注解类型
+				"storage.type.parameters.groovy", // Groovy 语言中的参数类型
+				"storage.type.generic.groovy", // Groovy 语言中的泛型类型
+				"storage.type.object.array.groovy", // Groovy 语言中的对象数组类型
+				"storage.type.primitive.array.groovy", // Groovy 语言中的原始数组类型
+				"storage.type.primitive.groovy" // Groovy 语言中的原始类型
 			],
 			"settings": {
-				"foreground": "#4EC9B0"
+				"foreground": "#4EC9B0" // 前景颜色
 			}
 		},
 		{
-			"name": "Types declaration and references, TS grammar specific",
+			"name": "Types declaration and references, TS grammar specific", // 类型声明和引用，特定于 TS 语法
 			"scope": [
-				"meta.type.cast.expr",
-				"meta.type.new.expr",
-				"support.constant.math",
-				"support.constant.dom",
-				"support.constant.json",
-				"entity.other.inherited-class"
+				"meta.type.cast.expr", // 类型转换表达式
+				"meta.type.new.expr", // 新类型表达式
+				"support.constant.math", // 数学常量支持
+				"support.constant.dom", // DOM 常量支持
+				"support.constant.json", // JSON 常量支持
+				"entity.other.inherited-class" // 其他继承类
 			],
 			"settings": {
-				"foreground": "#4EC9B0"
+				"foreground": "#4EC9B0" // 前景颜色
 			}
 		},
 		{
-			"name": "Control flow / Special keywords",
+			"name": "Control flow / Special keywords", // 控制流 / 特殊关键字
 			"scope": [
-				"keyword.control",
-				"source.cpp keyword.operator.new",
-				"keyword.operator.delete",
-				"keyword.other.using",
-				"keyword.other.directive.using",
-				"keyword.other.operator",
-				"entity.name.operator"
+				"keyword.control", // 控制关键字
+				"source.cpp keyword.operator.new", // C++ 源代码中的 new 操作符关键字
+				"keyword.operator.delete", // delete 操作符关键字
+				"keyword.other.using", // 其他 using 关键字
+				"keyword.other.directive.using", // 其他 using 指令关键字
+				"keyword.other.operator", // 其他操作符关键字
+				"entity.name.operator" // 操作符名称
 			],
 			"settings": {
-				"foreground": "#C586C0"
+				"foreground": "#C586C0" // 前景颜色
 			}
 		},
 		{
-			"name": "Variable and parameter name",
+			"name": "Variable and parameter name", // 变量和参数名称
 			"scope": [
-				"variable",
-				"meta.definition.variable.name",
-				"support.variable",
-				"entity.name.variable",
-				"constant.other.placeholder"
+				"variable", // 变量
+				"meta.definition.variable.name", // 变量名称定义元数据
+				"support.variable", // 支持变量
+				"entity.name.variable", // 变量名称
+				"constant.other.placeholder" // 其他占位符常量
 			],
 			"settings": {
-				"foreground": "#9CDCFE"
+				"foreground": "#9CDCFE" // 前景颜色
 			}
 		},
 		{
-			"name": "Constants and enums",
-			"scope": ["variable.other.constant", "variable.other.enummember"],
+			"name": "Constants and enums", // 常量和枚举
+			"scope": ["variable.other.constant", "variable.other.enummember"], // 其他常量变量和枚举成员变量
 			"settings": {
-				"foreground": "#4FC1FF"
+				"foreground": "#4FC1FF" // 前景颜色
 			}
 		},
 		{
-			"name": "Object keys, TS grammar specific",
-			"scope": ["meta.object-literal.key"],
+			"name": "Object keys, TS grammar specific", // 对象键，特定于 TS 语法
+			"scope": ["meta.object-literal.key"], // 对象字面量键元数据
 			"settings": {
-				"foreground": "#9CDCFE"
+				"foreground": "#9CDCFE" // 前景颜色
 			}
 		},
 		{
-			"name": "CSS property value",
+			"name": "CSS property value", // CSS 属性值
 			"scope": [
-				"support.constant.property-value",
-				"support.constant.font-name",
-				"support.constant.media-type",
-				"support.constant.media",
-				"constant.other.color.rgb-value",
-				"constant.other.rgb-value",
-				"support.constant.color"
+				"support.constant.property-value", // 支持常量属性值
+				"support.constant.font-name", // 支持常量字体名称
+				"support.constant.media-type", // 支持常量媒体类型
+				"support.constant.media", // 支持常量媒体
+				"constant.other.color.rgb-value", // 其他 RGB 值常量颜色
+				"constant.other.rgb-value", // 其他 RGB 值常量
+				"support.constant.color" // 支持常量颜色
 			],
 			"settings": {
-				"foreground": "#CE9178"
+				"foreground": "#CE9178" // 前景颜色
 			}
 		},
 		{
-			"name": "Regular expression groups",
+			"name": "Regular expression groups", // 正则表达式组
 			"scope": [
-				"punctuation.definition.group.regexp",
-				"punctuation.definition.group.assertion.regexp",
-				"punctuation.definition.character-class.regexp",
-				"punctuation.character.set.begin.regexp",
-				"punctuation.character.set.end.regexp",
-				"keyword.operator.negation.regexp",
-				"support.other.parenthesis.regexp"
+				"punctuation.definition.group.regexp", // 正则表达式组定义标点符号
+				"punctuation.definition.group.assertion.regexp", // 正则表达式断言组定义标点符号
+				"punctuation.definition.character-class.regexp", // 正则表达式字符类定义标点符号
+				"punctuation.character.set.begin.regexp", // 正则表达式字符集开始标点符号
+				"punctuation.character.set.end.regexp", // 正则表达式字符集结束标点符号
+				"keyword.operator.negation.regexp", // 正则表达式否定操作符关键字
+				"support.other.parenthesis.regexp" // 其他正则表达式括号支持
 			],
 			"settings": {
-				"foreground": "#CE9178"
+				"foreground": "#CE9178" // 前景颜色
 			}
 		},
 		{
 			"scope": [
-				"constant.character.character-class.regexp",
-				"constant.other.character-class.set.regexp",
-				"constant.other.character-class.regexp",
-				"constant.character.set.regexp"
+				"constant.character.character-class.regexp", // 正则表达式字符类常量字符
+				"constant.other.character-class.set.regexp", // 正则表达式字符类集合常量
+				"constant.other.character-class.regexp", // 正则表达式字符类常量
+				"constant.character.set.regexp" // 正则表达式字符集常量
 			],
 			"settings": {
-				"foreground": "#d16969"
+				"foreground": "#d16969" // 前景颜色
 			}
 		},
 		{
-			"scope": ["keyword.operator.or.regexp", "keyword.control.anchor.regexp"],
+			"scope": ["keyword.operator.or.regexp", "keyword.control.anchor.regexp"], // 正则表达式或操作符关键字和锚点控制关键字
 			"settings": {
-				"foreground": "#DCDCAA"
+				"foreground": "#DCDCAA" // 前景颜色
 			}
 		},
 		{
-			"scope": "keyword.operator.quantifier.regexp",
+			"scope": "keyword.operator.quantifier.regexp", // 正则表达式量词操作符关键字
 			"settings": {
-				"foreground": "#d7ba7d"
+				"foreground": "#d7ba7d" // 前景颜色
 			}
 		},
 		{
-			"scope": ["constant.character", "constant.other.option"],
+			"scope": ["constant.character", "constant.other.option"], // 常量字符和其他选项常量
 			"settings": {
-				"foreground": "#569cd6"
+				"foreground": "#569cd6" // 前景颜色
 			}
 		},
 		{
-			"scope": "constant.character.escape",
+			"scope": "constant.character.escape", // 转义字符常量
 			"settings": {
-				"foreground": "#d7ba7d"
+				"foreground": "#d7ba7d" // 前景颜色
 			}
 		},
 		{
-			"scope": "entity.name.label",
+			"scope": "entity.name.label", // 标签名称
 			"settings": {
-				"foreground": "#C8C8C8"
+				"foreground": "#C8C8C8" // 前景颜色
 			}
 		}
 	],
 	"semanticTokenColors": {
-		"newOperator": "#C586C0",
-		"stringLiteral": "#ce9178",
-		"customLiteral": "#DCDCAA",
-		"numberLiteral": "#b5cea8"
+		"newOperator": "#C586C0", // 新操作符颜色
+		"stringLiteral": "#ce9178", // 字符串字面量颜色
+		"customLiteral": "#DCDCAA", // 自定义字面量颜色
+		"numberLiteral": "#b5cea8" // 数字字面量颜色
 	}
 }

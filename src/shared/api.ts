@@ -1,5 +1,6 @@
 import * as vscode from "vscode"
 
+// 定义 API 提供者类型
 export type ApiProvider =
 	| "anthropic"
 	| "glama"
@@ -17,6 +18,7 @@ export type ApiProvider =
 	| "unbound"
 	| "requesty"
 
+// 定义 API 处理选项接口
 export interface ApiHandlerOptions {
 	apiModelId?: string
 	apiKey?: string // anthropic
@@ -68,19 +70,19 @@ export interface ApiHandlerOptions {
 	modelTemperature?: number
 }
 
+// 定义 API 配置类型
 export type ApiConfiguration = ApiHandlerOptions & {
 	apiProvider?: ApiProvider
-	id?: string // stable unique identifier
+	id?: string // 稳定唯一标识符
 }
 
-// Models
-
+// 模型信息接口
 export interface ModelInfo {
 	maxTokens?: number
 	contextWindow: number
 	supportsImages?: boolean
 	supportsComputerUse?: boolean
-	supportsPromptCache: boolean // this value is hardcoded for now
+	supportsPromptCache: boolean // 该值目前是硬编码的
 	inputPrice?: number
 	outputPrice?: number
 	cacheWritesPrice?: number
@@ -89,7 +91,7 @@ export interface ModelInfo {
 	reasoningEffort?: "low" | "medium" | "high"
 }
 
-// Anthropic
+// Anthropic 模型
 // https://docs.anthropic.com/en/docs/about-claude/models
 export type AnthropicModelId = keyof typeof anthropicModels
 export const anthropicDefaultModelId: AnthropicModelId = "claude-3-5-sonnet-20241022"
@@ -100,10 +102,10 @@ export const anthropicModels = {
 		supportsImages: true,
 		supportsComputerUse: true,
 		supportsPromptCache: true,
-		inputPrice: 3.0, // $3 per million input tokens
-		outputPrice: 15.0, // $15 per million output tokens
-		cacheWritesPrice: 3.75, // $3.75 per million tokens
-		cacheReadsPrice: 0.3, // $0.30 per million tokens
+		inputPrice: 3.0, // 每百万输入令牌 $3
+		outputPrice: 15.0, // 每百万输出令牌 $15
+		cacheWritesPrice: 3.75, // 每百万令牌 $3.75
+		cacheReadsPrice: 0.3, // 每百万令牌 $0.30
 	},
 	"claude-3-5-haiku-20241022": {
 		maxTokens: 8192,
@@ -135,29 +137,29 @@ export const anthropicModels = {
 		cacheWritesPrice: 0.3,
 		cacheReadsPrice: 0.03,
 	},
-} as const satisfies Record<string, ModelInfo> // as const assertion makes the object deeply readonly
+} as const satisfies Record<string, ModelInfo> // as const 断言使对象深度只读
 
-// AWS Bedrock
+// AWS Bedrock 模型
 // https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html
 export interface MessageContent {
 	type: "text" | "image" | "video" | "tool_use" | "tool_result"
 	text?: string
 	source?: {
 		type: "base64"
-		data: string | Uint8Array // string for Anthropic, Uint8Array for Bedrock
+		data: string | Uint8Array // Anthropic 使用字符串，Bedrock 使用 Uint8Array
 		media_type: "image/jpeg" | "image/png" | "image/gif" | "image/webp"
 	}
-	// Video specific fields
+	// 视频特定字段
 	format?: string
 	s3Location?: {
 		uri: string
 		bucketOwner?: string
 	}
-	// Tool use and result fields
+	// 工具使用和结果字段
 	toolUseId?: string
 	name?: string
 	input?: any
-	output?: any // Used for tool_result type
+	output?: any // 用于 tool_result 类型
 }
 
 export type BedrockModelId = keyof typeof bedrockModels
@@ -171,8 +173,8 @@ export const bedrockModels = {
 		supportsPromptCache: false,
 		inputPrice: 0.8,
 		outputPrice: 3.2,
-		cacheWritesPrice: 0.8, // per million tokens
-		cacheReadsPrice: 0.2, // per million tokens
+		cacheWritesPrice: 0.8, // 每百万令牌
+		cacheReadsPrice: 0.2, // 每百万令牌
 	},
 	"amazon.nova-lite-v1:0": {
 		maxTokens: 5000,
@@ -182,8 +184,8 @@ export const bedrockModels = {
 		supportsPromptCache: false,
 		inputPrice: 0.06,
 		outputPrice: 0.024,
-		cacheWritesPrice: 0.06, // per million tokens
-		cacheReadsPrice: 0.015, // per million tokens
+		cacheWritesPrice: 0.06, // 每百万令牌
+		cacheReadsPrice: 0.015, // 每百万令牌
 	},
 	"amazon.nova-micro-v1:0": {
 		maxTokens: 5000,
@@ -193,8 +195,8 @@ export const bedrockModels = {
 		supportsPromptCache: false,
 		inputPrice: 0.035,
 		outputPrice: 0.14,
-		cacheWritesPrice: 0.035, // per million tokens
-		cacheReadsPrice: 0.00875, // per million tokens
+		cacheWritesPrice: 0.035, // 每百万令牌
+		cacheReadsPrice: 0.00875, // 每百万令牌
 	},
 	"anthropic.claude-3-5-sonnet-20241022-v2:0": {
 		maxTokens: 8192,
@@ -204,8 +206,8 @@ export const bedrockModels = {
 		supportsPromptCache: false,
 		inputPrice: 3.0,
 		outputPrice: 15.0,
-		cacheWritesPrice: 3.75, // per million tokens
-		cacheReadsPrice: 0.3, // per million tokens
+		cacheWritesPrice: 3.75, // 每百万令牌
+		cacheReadsPrice: 0.3, // 每百万令牌
 	},
 	"anthropic.claude-3-5-haiku-20241022-v1:0": {
 		maxTokens: 8192,
@@ -341,7 +343,7 @@ export const bedrockModels = {
 	},
 } as const satisfies Record<string, ModelInfo>
 
-// Glama
+// Glama 模型
 // https://glama.ai/models
 export const glamaDefaultModelId = "anthropic/claude-3-5-sonnet"
 export const glamaDefaultModelInfo: ModelInfo = {
@@ -390,7 +392,7 @@ export const openRouterDefaultModelInfo: ModelInfo = {
 		"The new Claude 3.5 Sonnet delivers better-than-Opus capabilities, faster-than-Sonnet speeds, at the same Sonnet prices. Sonnet is particularly good at:\n\n- Coding: New Sonnet scores ~49% on SWE-Bench Verified, higher than the last best score, and without any fancy prompt scaffolding\n- Data science: Augments human data science expertise; navigates unstructured data while using multiple tools for insights\n- Visual processing: excelling at interpreting charts, graphs, and images, accurately transcribing text to derive insights beyond just the text alone\n- Agentic tasks: exceptional tool use, making it great at agentic tasks (i.e. complex, multi-step problem solving tasks that require engaging with other systems)\n\n#multimodal\n\n_This is a faster endpoint, made available in collaboration with Anthropic, that is self-moderated: response moderation happens on the provider's side instead of OpenRouter's. For requests that pass moderation, it's identical to the [Standard](/anthropic/claude-3.5-sonnet) variant._",
 }
 
-// Vertex AI
+// Vertex AI 模型
 // https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-claude
 export type VertexModelId = keyof typeof vertexModels
 export const vertexDefaultModelId: VertexModelId = "claude-3-5-sonnet-v2@20241022"
@@ -456,7 +458,7 @@ export const requestyModelInfoSaneDefaults: ModelInfo = {
 	outputPrice: 0,
 }
 
-// Gemini
+// Gemini 模型
 // https://ai.google.dev/gemini-api/docs/models/gemini
 export type GeminiModelId = keyof typeof geminiModels
 export const geminiDefaultModelId: GeminiModelId = "gemini-2.0-flash-001"
@@ -559,7 +561,7 @@ export const geminiModels = {
 	},
 } as const satisfies Record<string, ModelInfo>
 
-// OpenAI Native
+// OpenAI Native 模型
 // https://openai.com/api/pricing/
 export type OpenAiNativeModelId = keyof typeof openAiNativeModels
 export const openAiNativeDefaultModelId: OpenAiNativeModelId = "gpt-4o"
@@ -634,7 +636,7 @@ export const openAiNativeModels = {
 	},
 } as const satisfies Record<string, ModelInfo>
 
-// DeepSeek
+// DeepSeek 模型
 // https://platform.deepseek.com/docs/api
 export type DeepSeekModelId = keyof typeof deepSeekModels
 export const deepSeekDefaultModelId: DeepSeekModelId = "deepseek-chat"
@@ -644,8 +646,8 @@ export const deepSeekModels = {
 		contextWindow: 64_000,
 		supportsImages: false,
 		supportsPromptCache: false,
-		inputPrice: 0.014, // $0.014 per million tokens
-		outputPrice: 0.28, // $0.28 per million tokens
+		inputPrice: 0.014, // 每百万令牌 $0.014
+		outputPrice: 0.28, // 每百万令牌 $0.28
 		description: `DeepSeek-V3 achieves a significant breakthrough in inference speed over previous models. It tops the leaderboard among open-source models and rivals the most advanced closed-source models globally.`,
 	},
 	"deepseek-reasoner": {
@@ -653,8 +655,8 @@ export const deepSeekModels = {
 		contextWindow: 64_000,
 		supportsImages: false,
 		supportsPromptCache: false,
-		inputPrice: 0.55, // $0.55 per million tokens
-		outputPrice: 2.19, // $2.19 per million tokens
+		inputPrice: 0.55, // 每百万令牌 $0.55
+		outputPrice: 2.19, // 每百万令牌 $2.19
 		description: `DeepSeek-R1 achieves performance comparable to OpenAI-o1 across math, code, and reasoning tasks.`,
 	},
 } as const satisfies Record<string, ModelInfo>
@@ -664,7 +666,7 @@ export const deepSeekModels = {
 // https://learn.microsoft.com/en-us/azure/ai-services/openai/reference#api-specs
 export const azureOpenAiDefaultApiVersion = "2024-08-01-preview"
 
-// Mistral
+// Mistral 模型
 // https://docs.mistral.ai/getting-started/models/models_overview/
 export type MistralModelId = keyof typeof mistralModels
 export const mistralDefaultModelId: MistralModelId = "codestral-latest"

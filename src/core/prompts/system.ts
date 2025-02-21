@@ -92,21 +92,22 @@ ${await addCustomInstructions(promptComponent?.customInstructions || modeConfig.
 	return basePrompt
 }
 
+// 定义一个异步函数，生成系统提示
 export const SYSTEM_PROMPT = async (
-	context: vscode.ExtensionContext,
-	cwd: string,
-	supportsComputerUse: boolean,
-	mcpHub?: McpHub,
-	diffStrategy?: DiffStrategy,
-	browserViewportSize?: string,
-	mode: Mode = defaultModeSlug,
-	customModePrompts?: CustomModePrompts,
-	customModes?: ModeConfig[],
-	globalCustomInstructions?: string,
-	preferredLanguage?: string,
-	diffEnabled?: boolean,
-	experiments?: Record<string, boolean>,
-	enableMcpServerCreation?: boolean,
+	context: vscode.ExtensionContext, // VSCode 扩展上下文
+	cwd: string, // 当前工作目录
+	supportsComputerUse: boolean, // 是否支持计算机使用
+	mcpHub?: McpHub, // 可选的 MCP Hub
+	diffStrategy?: DiffStrategy, // 可选的差异策略
+	browserViewportSize?: string, // 可选的浏览器视口大小
+	mode: Mode = defaultModeSlug, // 模式，默认为 defaultModeSlug
+	customModePrompts?: CustomModePrompts, // 可选的自定义模式提示
+	customModes?: ModeConfig[], // 可选的自定义模式配置数组
+	globalCustomInstructions?: string, // 可选的全局自定义指令
+	preferredLanguage?: string, // 可选的首选语言
+	diffEnabled?: boolean, // 是否启用差异
+	experiments?: Record<string, boolean>, // 可选的实验记录
+	enableMcpServerCreation?: boolean, // 是否启用 MCP 服务器创建
 ): Promise<string> => {
 	if (!context) {
 		throw new Error("Extension context is required for generating system prompt")

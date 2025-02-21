@@ -1,42 +1,42 @@
 export interface ClineAPI {
 	/**
-	 * Sets the custom instructions in the global storage.
-	 * @param value The custom instructions to be saved.
+	 * 将自定义指令保存到全局存储中。
+	 * @param value 要保存的自定义指令。
 	 */
 	setCustomInstructions(value: string): Promise<void>
 
 	/**
-	 * Retrieves the custom instructions from the global storage.
-	 * @returns The saved custom instructions, or undefined if not set.
+	 * 从全局存储中检索自定义指令。
+	 * @returns 保存的自定义指令，如果未设置则返回 undefined。
 	 */
 	getCustomInstructions(): Promise<string | undefined>
 
 	/**
-	 * Starts a new task with an optional initial message and images.
-	 * @param task Optional initial task message.
-	 * @param images Optional array of image data URIs (e.g., "data:image/webp;base64,...").
+	 * 使用可选的初始消息和图像启动新任务。
+	 * @param task 可选的初始任务消息。
+	 * @param images 可选的图像数据 URI 数组（例如 "data:image/webp;base64,..."）。
 	 */
 	startNewTask(task?: string, images?: string[]): Promise<void>
 
 	/**
-	 * Sends a message to the current task.
-	 * @param message Optional message to send.
-	 * @param images Optional array of image data URIs (e.g., "data:image/webp;base64,...").
+	 * 向当前任务发送消息。
+	 * @param message 可选的要发送的消息。
+	 * @param images 可选的图像数据 URI 数组（例如 "data:image/webp;base64,..."）。
 	 */
 	sendMessage(message?: string, images?: string[]): Promise<void>
 
 	/**
-	 * Simulates pressing the primary button in the chat interface.
+	 * 模拟按下聊天界面中的主按钮。
 	 */
 	pressPrimaryButton(): Promise<void>
 
 	/**
-	 * Simulates pressing the secondary button in the chat interface.
+	 * 模拟按下聊天界面中的次按钮。
 	 */
 	pressSecondaryButton(): Promise<void>
 
 	/**
-	 * The sidebar provider instance.
+	 * 侧边栏提供者实例。
 	 */
 	sidebarProvider: ClineSidebarProvider
 }

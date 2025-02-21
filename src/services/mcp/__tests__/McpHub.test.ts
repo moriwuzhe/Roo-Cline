@@ -1,23 +1,23 @@
-import type { McpHub as McpHubType } from "../McpHub"
-import type { ClineProvider } from "../../../core/webview/ClineProvider"
-import type { ExtensionContext, Uri } from "vscode"
-import type { McpConnection } from "../McpHub"
-import { StdioConfigSchema } from "../McpHub"
+import type { McpHub as McpHubType } from "../McpHub" // 导入 McpHub 类型
+import type { ClineProvider } from "../../../core/webview/ClineProvider" // 导入 ClineProvider 类型
+import type { ExtensionContext, Uri } from "vscode" // 导入 VSCode 的 ExtensionContext 和 Uri 类型
+import type { McpConnection } from "../McpHub" // 导入 McpConnection 类型
+import { StdioConfigSchema } from "../McpHub" // 导入 StdioConfigSchema
 
-const fs = require("fs/promises")
-const { McpHub } = require("../McpHub")
+const fs = require("fs/promises") // 导入 fs/promises 模块
+const { McpHub } = require("../McpHub") // 导入 McpHub 模块
 
-jest.mock("vscode")
-jest.mock("fs/promises")
-jest.mock("../../../core/webview/ClineProvider")
+jest.mock("vscode") // 模拟 VSCode 模块
+jest.mock("fs/promises") // 模拟 fs/promises 模块
+jest.mock("../../../core/webview/ClineProvider") // 模拟 ClineProvider 模块
 
 describe("McpHub", () => {
-	let mcpHub: McpHubType
-	let mockProvider: Partial<ClineProvider>
-	const mockSettingsPath = "/mock/settings/path/cline_mcp_settings.json"
+	let mcpHub: McpHubType // 定义 mcpHub 变量
+	let mockProvider: Partial<ClineProvider> // 定义 mockProvider 变量
+	const mockSettingsPath = "/mock/settings/path/cline_mcp_settings.json" // 定义 mockSettingsPath 变量
 
 	beforeEach(() => {
-		jest.clearAllMocks()
+		jest.clearAllMocks() // 清除所有模拟
 
 		const mockUri: Uri = {
 			scheme: "file",
@@ -28,7 +28,7 @@ describe("McpHub", () => {
 			fsPath: "/test/path",
 			with: jest.fn(),
 			toJSON: jest.fn(),
-		}
+		} // 定义 mockUri 变量
 
 		mockProvider = {
 			ensureSettingsDirectoryExists: jest.fn().mockResolvedValue("/mock/settings/path"),
@@ -64,9 +64,9 @@ describe("McpHub", () => {
 				logPath: "/test/path",
 				languageModelAccessInformation: {} as any,
 			} as ExtensionContext,
-		}
+		} // 定义 mockProvider 变量
 
-		// Mock fs.readFile for initial settings
+		// 模拟 fs.readFile 以获取初始设置
 		;(fs.readFile as jest.Mock).mockResolvedValue(
 			JSON.stringify({
 				mcpServers: {
@@ -79,7 +79,7 @@ describe("McpHub", () => {
 			}),
 		)
 
-		mcpHub = new McpHub(mockProvider as ClineProvider)
+		mcpHub = new McpHub(mockProvider as ClineProvider) // 初始化 mcpHub
 	})
 
 	describe("toggleToolAlwaysAllow", () => {
@@ -92,14 +92,14 @@ describe("McpHub", () => {
 						alwaysAllow: [],
 					},
 				},
-			}
+			} // 定义 mockConfig 变量
 
-			// Mock reading initial config
+			// 模拟读取初始配置
 			;(fs.readFile as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockConfig))
 
-			await mcpHub.toggleToolAlwaysAllow("test-server", "new-tool", true)
+			await mcpHub.toggleToolAlwaysAllow("test-server", "new-tool", true) // 启用工具
 
-			// Verify the config was updated correctly
+			// 验证配置是否正确更新
 			const writeCall = (fs.writeFile as jest.Mock).mock.calls[0]
 			const writtenConfig = JSON.parse(writeCall[1])
 			expect(writtenConfig.mcpServers["test-server"].alwaysAllow).toContain("new-tool")
@@ -114,14 +114,14 @@ describe("McpHub", () => {
 						alwaysAllow: ["existing-tool"],
 					},
 				},
-			}
+			} // 定义 mockConfig 变量
 
-			// Mock reading initial config
+			// 模拟读取初始配置
 			;(fs.readFile as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockConfig))
 
-			await mcpHub.toggleToolAlwaysAllow("test-server", "existing-tool", false)
+			await mcpHub.toggleToolAlwaysAllow("test-server", "existing-tool", false) // 禁用工具
 
-			// Verify the config was updated correctly
+			// 验证配置是否正确更新
 			const writeCall = (fs.writeFile as jest.Mock).mock.calls[0]
 			const writtenConfig = JSON.parse(writeCall[1])
 			expect(writtenConfig.mcpServers["test-server"].alwaysAllow).not.toContain("existing-tool")
@@ -135,14 +135,14 @@ describe("McpHub", () => {
 						args: ["test.js"],
 					},
 				},
-			}
+			} // 定义 mockConfig 变量
 
-			// Mock reading initial config
+			// 模拟读取初始配置
 			;(fs.readFile as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockConfig))
 
-			await mcpHub.toggleToolAlwaysAllow("test-server", "new-tool", true)
+			await mcpHub.toggleToolAlwaysAllow("test-server", "new-tool", true) // 启用工具
 
-			// Verify the config was updated with initialized alwaysAllow
+			// 验证配置是否正确更新并初始化 alwaysAllow
 			const writeCall = (fs.writeFile as jest.Mock).mock.calls[0]
 			const writtenConfig = JSON.parse(writeCall[1])
 			expect(writtenConfig.mcpServers["test-server"].alwaysAllow).toBeDefined()
@@ -160,14 +160,14 @@ describe("McpHub", () => {
 						disabled: false,
 					},
 				},
-			}
+			} // 定义 mockConfig 变量
 
-			// Mock reading initial config
+			// 模拟读取初始配置
 			;(fs.readFile as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockConfig))
 
-			await mcpHub.toggleServerDisabled("test-server", true)
+			await mcpHub.toggleServerDisabled("test-server", true) // 禁用服务器
 
-			// Verify the config was updated correctly
+			// 验证配置是否正确更新
 			const writeCall = (fs.writeFile as jest.Mock).mock.calls[0]
 			const writtenConfig = JSON.parse(writeCall[1])
 			expect(writtenConfig.mcpServers["test-server"].disabled).toBe(true)
@@ -195,10 +195,10 @@ describe("McpHub", () => {
 					client: {} as any,
 					transport: {} as any,
 				},
-			]
+			] // 定义 mockConnections 变量
 
 			mcpHub.connections = mockConnections
-			const servers = mcpHub.getServers()
+			const servers = mcpHub.getServers() // 获取启用的服务器
 
 			expect(servers.length).toBe(1)
 			expect(servers[0].name).toBe("enabled-server")
@@ -216,13 +216,13 @@ describe("McpHub", () => {
 					request: jest.fn().mockResolvedValue({ result: "success" }),
 				} as any,
 				transport: {} as any,
-			}
+			} // 定义 mockConnection 变量
 
 			mcpHub.connections = [mockConnection]
 
 			await expect(mcpHub.callTool("disabled-server", "some-tool", {})).rejects.toThrow(
 				'Server "disabled-server" is disabled and cannot be used',
-			)
+			) // 验证禁用服务器不能调用工具
 		})
 
 		it("should prevent reading resources from disabled servers", async () => {
@@ -237,19 +237,19 @@ describe("McpHub", () => {
 					request: jest.fn(),
 				} as any,
 				transport: {} as any,
-			}
+			} // 定义 mockConnection 变量
 
 			mcpHub.connections = [mockConnection]
 
 			await expect(mcpHub.readResource("disabled-server", "some/uri")).rejects.toThrow(
 				'Server "disabled-server" is disabled',
-			)
+			) // 验证禁用服务器不能读取资源
 		})
 	})
 
 	describe("callTool", () => {
 		it("should execute tool successfully", async () => {
-			// Mock the connection with a minimal client implementation
+			// 模拟连接，提供最小的客户端实现
 			const mockConnection: McpConnection = {
 				server: {
 					name: "test-server",
@@ -264,13 +264,13 @@ describe("McpHub", () => {
 					close: jest.fn(),
 					stderr: { on: jest.fn() },
 				} as any,
-			}
+			} // 定义 mockConnection 变量
 
 			mcpHub.connections = [mockConnection]
 
-			await mcpHub.callTool("test-server", "some-tool", {})
+			await mcpHub.callTool("test-server", "some-tool", {}) // 调用工具
 
-			// Verify the request was made with correct parameters
+			// 验证请求是否使用正确的参数
 			expect(mockConnection.client.request).toHaveBeenCalledWith(
 				{
 					method: "tools/call",
@@ -280,30 +280,30 @@ describe("McpHub", () => {
 					},
 				},
 				expect.any(Object),
-				expect.objectContaining({ timeout: 60000 }), // Default 60 second timeout
+				expect.objectContaining({ timeout: 60000 }), // 默认 60 秒超时
 			)
 		})
 
 		it("should throw error if server not found", async () => {
 			await expect(mcpHub.callTool("non-existent-server", "some-tool", {})).rejects.toThrow(
 				"No connection found for server: non-existent-server",
-			)
+			) // 验证找不到服务器时抛出错误
 		})
 
 		describe("timeout configuration", () => {
 			it("should validate timeout values", () => {
-				// Test valid timeout values
+				// 测试有效的超时值
 				const validConfig = {
 					command: "test",
 					timeout: 60,
 				}
 				expect(() => StdioConfigSchema.parse(validConfig)).not.toThrow()
 
-				// Test invalid timeout values
+				// 测试无效的超时值
 				const invalidConfigs = [
-					{ command: "test", timeout: 0 }, // Too low
-					{ command: "test", timeout: 3601 }, // Too high
-					{ command: "test", timeout: -1 }, // Negative
+					{ command: "test", timeout: 0 }, // 太低
+					{ command: "test", timeout: 3601 }, // 太高
+					{ command: "test", timeout: -1 }, // 负值
 				]
 
 				invalidConfigs.forEach((config) => {
@@ -315,22 +315,22 @@ describe("McpHub", () => {
 				const mockConnection: McpConnection = {
 					server: {
 						name: "test-server",
-						config: JSON.stringify({ command: "test" }), // No timeout specified
+						config: JSON.stringify({ command: "test" }), // 未指定超时
 						status: "connected",
 					},
 					client: {
 						request: jest.fn().mockResolvedValue({ content: [] }),
 					} as any,
 					transport: {} as any,
-				}
+				} // 定义 mockConnection 变量
 
 				mcpHub.connections = [mockConnection]
-				await mcpHub.callTool("test-server", "test-tool")
+				await mcpHub.callTool("test-server", "test-tool") // 调用工具
 
 				expect(mockConnection.client.request).toHaveBeenCalledWith(
 					expect.anything(),
 					expect.anything(),
-					expect.objectContaining({ timeout: 60000 }), // 60 seconds in milliseconds
+					expect.objectContaining({ timeout: 60000 }), // 60 秒（毫秒）
 				)
 			})
 
@@ -338,22 +338,22 @@ describe("McpHub", () => {
 				const mockConnection: McpConnection = {
 					server: {
 						name: "test-server",
-						config: JSON.stringify({ command: "test", timeout: 120 }), // 2 minutes
+						config: JSON.stringify({ command: "test", timeout: 120 }), // 2 分钟
 						status: "connected",
 					},
 					client: {
 						request: jest.fn().mockResolvedValue({ content: [] }),
 					} as any,
 					transport: {} as any,
-				}
+				} // 定义 mockConnection 变量
 
 				mcpHub.connections = [mockConnection]
-				await mcpHub.callTool("test-server", "test-tool")
+				await mcpHub.callTool("test-server", "test-tool") // 调用工具
 
 				expect(mockConnection.client.request).toHaveBeenCalledWith(
 					expect.anything(),
 					expect.anything(),
-					expect.objectContaining({ timeout: 120000 }), // 120 seconds in milliseconds
+					expect.objectContaining({ timeout: 120000 }), // 120 秒（毫秒）
 				)
 			})
 		})
@@ -368,14 +368,14 @@ describe("McpHub", () => {
 							timeout: 60,
 						},
 					},
-				}
+				} // 定义 mockConfig 变量
 
-				// Mock reading initial config
+				// 模拟读取初始配置
 				;(fs.readFile as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockConfig))
 
-				await mcpHub.updateServerTimeout("test-server", 120)
+				await mcpHub.updateServerTimeout("test-server", 120) // 更新服务器超时
 
-				// Verify the config was updated correctly
+				// 验证配置是否正确更新
 				const writeCall = (fs.writeFile as jest.Mock).mock.calls[0]
 				const writtenConfig = JSON.parse(writeCall[1])
 				expect(writtenConfig.mcpServers["test-server"].timeout).toBe(120)
@@ -390,25 +390,25 @@ describe("McpHub", () => {
 							timeout: 60,
 						},
 					},
-				}
+				} // 定义 mockConfig 变量
 
-				// Mock initial read
+				// 模拟初始读取
 				;(fs.readFile as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockConfig))
 
-				// Update with invalid timeout
+				// 使用无效超时更新
 				await mcpHub.updateServerTimeout("test-server", 3601)
 
-				// Config is written
+				// 配置已写入
 				expect(fs.writeFile).toHaveBeenCalled()
 
-				// Setup connection with invalid timeout
+				// 设置具有无效超时的连接
 				const mockConnection: McpConnection = {
 					server: {
 						name: "test-server",
 						config: JSON.stringify({
 							command: "node",
 							args: ["test.js"],
-							timeout: 3601, // Invalid timeout
+							timeout: 3601, // 无效超时
 						}),
 						status: "connected",
 					},
@@ -416,18 +416,18 @@ describe("McpHub", () => {
 						request: jest.fn().mockResolvedValue({ content: [] }),
 					} as any,
 					transport: {} as any,
-				}
+				} // 定义 mockConnection 变量
 
 				mcpHub.connections = [mockConnection]
 
-				// Call tool - should use default timeout
+				// 调用工具 - 应使用默认超时
 				await mcpHub.callTool("test-server", "test-tool")
 
-				// Verify default timeout was used
+				// 验证是否使用了默认超时
 				expect(mockConnection.client.request).toHaveBeenCalledWith(
 					expect.anything(),
 					expect.anything(),
-					expect.objectContaining({ timeout: 60000 }), // Default 60 seconds
+					expect.objectContaining({ timeout: 60000 }), // 默认 60 秒
 				)
 			})
 
@@ -440,16 +440,16 @@ describe("McpHub", () => {
 							timeout: 60,
 						},
 					},
-				}
+				} // 定义 mockConfig 变量
 
 				;(fs.readFile as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockConfig))
 
-				// Test valid timeout values
+				// 测试有效的超时值
 				const validTimeouts = [1, 60, 3600]
 				for (const timeout of validTimeouts) {
 					await mcpHub.updateServerTimeout("test-server", timeout)
 					expect(fs.writeFile).toHaveBeenCalled()
-					jest.clearAllMocks() // Reset for next iteration
+					jest.clearAllMocks() // 为下一次迭代重置
 					;(fs.readFile as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockConfig))
 				}
 			})
@@ -463,17 +463,17 @@ describe("McpHub", () => {
 							timeout: 60,
 						},
 					},
-				}
+				} // 定义 mockConfig 变量
 
 				;(fs.readFile as jest.Mock).mockResolvedValueOnce(JSON.stringify(mockConfig))
 
-				await mcpHub.updateServerTimeout("test-server", 120)
+				await mcpHub.updateServerTimeout("test-server", 120) // 更新服务器超时
 
 				expect(mockProvider.postMessageToWebview).toHaveBeenCalledWith(
 					expect.objectContaining({
 						type: "mcpServers",
 					}),
-				)
+				) // 验证是否通知了 webview
 			})
 		})
 	})

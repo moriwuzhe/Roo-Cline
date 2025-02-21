@@ -1,7 +1,7 @@
 import { loadRequiredLanguageParsers } from "../languageParser"
 import Parser from "web-tree-sitter"
 
-// Mock web-tree-sitter
+// 模拟 web-tree-sitter
 const mockSetLanguage = jest.fn()
 jest.mock("web-tree-sitter", () => {
 	return {
@@ -12,14 +12,14 @@ jest.mock("web-tree-sitter", () => {
 	}
 })
 
-// Add static methods to Parser mock
+// 为 Parser 模拟添加静态方法
 const ParserMock = Parser as jest.MockedClass<typeof Parser>
 ParserMock.init = jest.fn().mockResolvedValue(undefined)
 ParserMock.Language = {
 	load: jest.fn().mockResolvedValue({
 		query: jest.fn().mockReturnValue("mockQuery"),
 	}),
-	prototype: {}, // Add required prototype property
+	prototype: {}, // 添加所需的 prototype 属性
 } as unknown as typeof Parser.Language
 
 describe("Language Parser", () => {
@@ -28,7 +28,7 @@ describe("Language Parser", () => {
 	})
 
 	describe("loadRequiredLanguageParsers", () => {
-		it("should initialize parser only once", async () => {
+		it("应只初始化解析器一次", async () => {
 			const files = ["test.js", "test2.js"]
 			await loadRequiredLanguageParsers(files)
 			await loadRequiredLanguageParsers(files)
@@ -36,7 +36,7 @@ describe("Language Parser", () => {
 			expect(ParserMock.init).toHaveBeenCalledTimes(1)
 		})
 
-		it("should load JavaScript parser for .js and .jsx files", async () => {
+		it("应为 .js 和 .jsx 文件加载 JavaScript 解析器", async () => {
 			const files = ["test.js", "test.jsx"]
 			const parsers = await loadRequiredLanguageParsers(files)
 
@@ -49,7 +49,7 @@ describe("Language Parser", () => {
 			expect(parsers.jsx.query).toBeDefined()
 		})
 
-		it("should load TypeScript parser for .ts and .tsx files", async () => {
+		it("应为 .ts 和 .tsx 文件加载 TypeScript 解析器", async () => {
 			const files = ["test.ts", "test.tsx"]
 			const parsers = await loadRequiredLanguageParsers(files)
 
@@ -61,7 +61,7 @@ describe("Language Parser", () => {
 			expect(parsers.tsx).toBeDefined()
 		})
 
-		it("should load Python parser for .py files", async () => {
+		it("应为 .py 文件加载 Python 解析器", async () => {
 			const files = ["test.py"]
 			const parsers = await loadRequiredLanguageParsers(files)
 
@@ -69,7 +69,7 @@ describe("Language Parser", () => {
 			expect(parsers.py).toBeDefined()
 		})
 
-		it("should load multiple language parsers as needed", async () => {
+		it("应根据需要加载多个语言解析器", async () => {
 			const files = ["test.js", "test.py", "test.rs", "test.go"]
 			const parsers = await loadRequiredLanguageParsers(files)
 
@@ -80,7 +80,7 @@ describe("Language Parser", () => {
 			expect(parsers.go).toBeDefined()
 		})
 
-		it("should handle C/C++ files correctly", async () => {
+		it("应正确处理 C/C++ 文件", async () => {
 			const files = ["test.c", "test.h", "test.cpp", "test.hpp"]
 			const parsers = await loadRequiredLanguageParsers(files)
 
@@ -92,13 +92,13 @@ describe("Language Parser", () => {
 			expect(parsers.hpp).toBeDefined()
 		})
 
-		it("should throw error for unsupported file extensions", async () => {
+		it("应为不支持的文件扩展名抛出错误", async () => {
 			const files = ["test.unsupported"]
 
 			await expect(loadRequiredLanguageParsers(files)).rejects.toThrow("Unsupported language: unsupported")
 		})
 
-		it("should load each language only once for multiple files", async () => {
+		it("应为多个文件仅加载每种语言一次", async () => {
 			const files = ["test1.js", "test2.js", "test3.js"]
 			await loadRequiredLanguageParsers(files)
 
@@ -108,7 +108,7 @@ describe("Language Parser", () => {
 			)
 		})
 
-		it("should set language for each parser instance", async () => {
+		it("应为每个解析器实例设置语言", async () => {
 			const files = ["test.js", "test.py"]
 			await loadRequiredLanguageParsers(files)
 

@@ -1,8 +1,8 @@
-import { TerminalProcess, mergePromise } from "../TerminalProcess"
-import * as vscode from "vscode"
-import { EventEmitter } from "events"
+import { TerminalProcess, mergePromise } from "../TerminalProcess" // 导入 TerminalProcess 和 mergePromise 模块
+import * as vscode from "vscode" // 导入 VSCode 模块
+import { EventEmitter } from "events" // 导入事件发射器模块
 
-// Mock vscode
+// 模拟 vscode
 jest.mock("vscode")
 
 describe("TerminalProcess", () => {
@@ -18,22 +18,22 @@ describe("TerminalProcess", () => {
 	let mockStream: AsyncIterableIterator<string>
 
 	beforeEach(() => {
-		terminalProcess = new TerminalProcess()
+		terminalProcess = new TerminalProcess() // 创建新的 TerminalProcess 实例
 
-		// Create properly typed mock terminal
+		// 创建正确类型的模拟终端
 		mockTerminal = {
 			shellIntegration: {
-				executeCommand: jest.fn(),
+				executeCommand: jest.fn(), // 模拟 executeCommand 函数
 			},
-			name: "Mock Terminal",
-			processId: Promise.resolve(123),
-			creationOptions: {},
-			exitStatus: undefined,
-			state: { isInteractedWith: true },
-			dispose: jest.fn(),
-			hide: jest.fn(),
-			show: jest.fn(),
-			sendText: jest.fn(),
+			name: "Mock Terminal", // 模拟终端名称
+			processId: Promise.resolve(123), // 模拟进程 ID
+			creationOptions: {}, // 模拟创建选项
+			exitStatus: undefined, // 模拟退出状态
+			state: { isInteractedWith: true }, // 模拟终端状态
+			dispose: jest.fn(), // 模拟 dispose 函数
+			hide: jest.fn(), // 模拟 hide 函数
+			show: jest.fn(), // 模拟 show 函数
+			sendText: jest.fn(), // 模拟 sendText 函数
 		} as unknown as jest.Mocked<
 			vscode.Terminal & {
 				shellIntegration: {
@@ -42,7 +42,7 @@ describe("TerminalProcess", () => {
 			}
 		>
 
-		// Reset event listeners
+			// 重置事件监听器
 		terminalProcess.removeAllListeners()
 	})
 
@@ -50,52 +50,52 @@ describe("TerminalProcess", () => {
 		it("handles shell integration commands correctly", async () => {
 			const lines: string[] = []
 			terminalProcess.on("line", (line) => {
-				// Skip empty lines used for loading spinner
+					// 跳过用于加载指示器的空行
 				if (line !== "") {
 					lines.push(line)
 				}
 			})
 
-			// Mock stream data with shell integration sequences
+			// 使用 shell 集成序列模拟流数据
 			mockStream = (async function* () {
-				// The first chunk contains the command start sequence
+				// 第一个数据块包含命令开始序列
 				yield "Initial output\n"
 				yield "More output\n"
-				// The last chunk contains the command end sequence
+				// 最后一个数据块包含命令结束序列
 				yield "Final output"
 			})()
 
 			mockExecution = {
-				read: jest.fn().mockReturnValue(mockStream),
+				read: jest.fn().mockReturnValue(mockStream), // 模拟 read 函数
 			}
 
-			mockTerminal.shellIntegration.executeCommand.mockReturnValue(mockExecution)
+			mockTerminal.shellIntegration.executeCommand.mockReturnValue(mockExecution) // 模拟 executeCommand 函数返回值
 
 			const completedPromise = new Promise<void>((resolve) => {
-				terminalProcess.once("completed", resolve)
+				terminalProcess.once("completed", resolve) // 监听 completed 事件
 			})
 
-			await terminalProcess.run(mockTerminal, "test command")
-			await completedPromise
+			await terminalProcess.run(mockTerminal, "test command") // 运行命令
+			await completedPromise // 等待命令完成
 
-			expect(lines).toEqual(["Initial output", "More output", "Final output"])
-			expect(terminalProcess.isHot).toBe(false)
+			expect(lines).toEqual(["Initial output", "More output", "Final output"]) // 断言输出行
+			expect(terminalProcess.isHot).toBe(false) // 断言 isHot 属性
 		})
 
 		it("handles terminals without shell integration", async () => {
 			const noShellTerminal = {
-				sendText: jest.fn(),
-				shellIntegration: undefined,
+				sendText: jest.fn(), // 模拟 sendText 函数
+				shellIntegration: undefined, // 没有 shell 集成
 			} as unknown as vscode.Terminal
 
 			const noShellPromise = new Promise<void>((resolve) => {
-				terminalProcess.once("no_shell_integration", resolve)
+				terminalProcess.once("no_shell_integration", resolve) // 监听 no_shell_integration 事件
 			})
 
-			await terminalProcess.run(noShellTerminal, "test command")
-			await noShellPromise
+			await terminalProcess.run(noShellTerminal, "test command") // 运行命令
+			await noShellPromise // 等待命令完成
 
-			expect(noShellTerminal.sendText).toHaveBeenCalledWith("test command", true)
+			expect(noShellTerminal.sendText).toHaveBeenCalledWith("test command", true) // 断言 sendText 函数被调用
 		})
 
 		it("sets hot state for compiling commands", async () => {
@@ -106,43 +106,43 @@ describe("TerminalProcess", () => {
 				}
 			})
 
-			// Create a promise that resolves when the first chunk is processed
+				// 创建一个在处理第一个数据块时解析的 promise
 			const firstChunkProcessed = new Promise<void>((resolve) => {
 				terminalProcess.on("line", () => resolve())
 			})
 
 			mockStream = (async function* () {
 				yield "compiling...\n"
-				// Wait to ensure hot state check happens after first chunk
+				// 等待以确保在第一个数据块之后进行热状态检查
 				await new Promise((resolve) => setTimeout(resolve, 10))
 				yield "still compiling...\n"
 				yield "done"
 			})()
 
 			mockExecution = {
-				read: jest.fn().mockReturnValue(mockStream),
+				read: jest.fn().mockReturnValue(mockStream), // 模拟 read 函数
 			}
 
-			mockTerminal.shellIntegration.executeCommand.mockReturnValue(mockExecution)
+			mockTerminal.shellIntegration.executeCommand.mockReturnValue(mockExecution) // 模拟 executeCommand 函数返回值
 
-			// Start the command execution
+			// 开始命令执行
 			const runPromise = terminalProcess.run(mockTerminal, "npm run build")
 
-			// Wait for the first chunk to be processed
+			// 等待第一个数据块被处理
 			await firstChunkProcessed
 
-			// Hot state should be true while compiling
+			// 编译时热状态应为 true
 			expect(terminalProcess.isHot).toBe(true)
 
-			// Complete the execution
+			// 完成执行
 			const completedPromise = new Promise<void>((resolve) => {
-				terminalProcess.once("completed", resolve)
+				terminalProcess.once("completed", resolve) // 监听 completed 事件
 			})
 
 			await runPromise
 			await completedPromise
 
-			expect(lines).toEqual(["compiling...", "still compiling...", "done"])
+			expect(lines).toEqual(["compiling...", "still compiling...", "done"]) // 断言输出行
 		})
 	})
 
@@ -151,7 +151,7 @@ describe("TerminalProcess", () => {
 			const lines: string[] = []
 			terminalProcess.on("line", (line) => lines.push(line))
 
-			// Simulate incoming chunks
+			// 模拟传入的数据块
 			terminalProcess["emitIfEol"]("first line\n")
 			terminalProcess["emitIfEol"]("second")
 			terminalProcess["emitIfEol"](" line\n")
@@ -159,7 +159,7 @@ describe("TerminalProcess", () => {
 
 			expect(lines).toEqual(["first line", "second line"])
 
-			// Process remaining buffer
+			// 处理剩余的缓冲区
 			terminalProcess["emitRemainingBufferIfListening"]()
 			expect(lines).toEqual(["first line", "second line", "third line"])
 		})
@@ -206,7 +206,7 @@ describe("TerminalProcess", () => {
 	describe("getUnretrievedOutput", () => {
 		it("returns and clears unretrieved output", () => {
 			terminalProcess["fullOutput"] = "previous\nnew output"
-			terminalProcess["lastRetrievedIndex"] = 9 // After "previous\n"
+			terminalProcess["lastRetrievedIndex"] = 9 // 在 "previous\n" 之后
 
 			const unretrieved = terminalProcess.getUnretrievedOutput()
 

@@ -1,145 +1,145 @@
 {
-	"$schema": "vscode://schemas/color-theme",
-	"name": "Default Light Modern",
-	"include": "./light_plus.json",
+	"$schema": "vscode://schemas/color-theme", // 颜色主题的模式
+	"name": "Default Light Modern", // 主题名称
+	"include": "./light_plus.json", // 包含的基础主题
 	"colors": {
-		"activityBar.activeBorder": "#005FB8",
-		"activityBar.background": "#F8F8F8",
-		"activityBar.border": "#E5E5E5",
-		"activityBar.foreground": "#1F1F1F",
-		"activityBar.inactiveForeground": "#616161",
-		"activityBarBadge.background": "#005FB8",
-		"activityBarBadge.foreground": "#FFFFFF",
-		"badge.background": "#CCCCCC",
-		"badge.foreground": "#3B3B3B",
-		"button.background": "#005FB8",
-		"button.border": "#0000001a",
-		"button.foreground": "#FFFFFF",
-		"button.hoverBackground": "#0258A8",
-		"button.secondaryBackground": "#E5E5E5",
-		"button.secondaryForeground": "#3B3B3B",
-		"button.secondaryHoverBackground": "#CCCCCC",
-		"chat.slashCommandBackground": "#D2ECFF",
-		"chat.slashCommandForeground": "#306CA2",
-		"checkbox.background": "#F8F8F8",
-		"checkbox.border": "#CECECE",
-		"descriptionForeground": "#3B3B3B",
-		"dropdown.background": "#FFFFFF",
-		"dropdown.border": "#CECECE",
-		"dropdown.foreground": "#3B3B3B",
-		"dropdown.listBackground": "#FFFFFF",
-		"editor.background": "#FFFFFF",
-		"editor.foreground": "#3B3B3B",
-		"editor.inactiveSelectionBackground": "#E5EBF1",
-		"editor.selectionHighlightBackground": "#ADD6FF80",
-		"editorGroup.border": "#E5E5E5",
-		"editorGroupHeader.tabsBackground": "#F8F8F8",
-		"editorGroupHeader.tabsBorder": "#E5E5E5",
-		"editorGutter.addedBackground": "#2EA043",
-		"editorGutter.deletedBackground": "#F85149",
-		"editorGutter.modifiedBackground": "#005FB8",
-		"editorIndentGuide.background1": "#D3D3D3",
-		"editorLineNumber.activeForeground": "#171184",
-		"editorLineNumber.foreground": "#6E7681",
-		"editorOverviewRuler.border": "#E5E5E5",
-		"editorSuggestWidget.background": "#F8F8F8",
-		"editorWidget.background": "#F8F8F8",
-		"errorForeground": "#F85149",
-		"focusBorder": "#005FB8",
-		"foreground": "#3B3B3B",
-		"icon.foreground": "#3B3B3B",
-		"input.background": "#FFFFFF",
-		"input.border": "#CECECE",
-		"input.foreground": "#3B3B3B",
-		"input.placeholderForeground": "#767676",
-		"inputOption.activeBackground": "#BED6ED",
-		"inputOption.activeBorder": "#005FB8",
-		"inputOption.activeForeground": "#000000",
-		"keybindingLabel.foreground": "#3B3B3B",
-		"list.activeSelectionBackground": "#E8E8E8",
-		"list.activeSelectionForeground": "#000000",
-		"list.activeSelectionIconForeground": "#000000",
-		"list.hoverBackground": "#F2F2F2",
-		"list.focusAndSelectionOutline": "#005FB8",
-		"menu.border": "#CECECE",
-		"notebook.cellBorderColor": "#E5E5E5",
-		"notebook.selectedCellBackground": "#C8DDF150",
-		"notificationCenterHeader.background": "#FFFFFF",
-		"notificationCenterHeader.foreground": "#3B3B3B",
-		"notifications.background": "#FFFFFF",
-		"notifications.border": "#E5E5E5",
-		"notifications.foreground": "#3B3B3B",
-		"panel.background": "#F8F8F8",
-		"panel.border": "#E5E5E5",
-		"panelInput.border": "#E5E5E5",
-		"panelTitle.activeBorder": "#005FB8",
-		"panelTitle.activeForeground": "#3B3B3B",
-		"panelTitle.inactiveForeground": "#3B3B3B",
-		"peekViewEditor.matchHighlightBackground": "#BB800966",
-		"peekViewResult.background": "#FFFFFF",
-		"peekViewResult.matchHighlightBackground": "#BB800966",
-		"pickerGroup.border": "#E5E5E5",
-		"pickerGroup.foreground": "#8B949E",
-		"ports.iconRunningProcessForeground": "#369432",
-		"progressBar.background": "#005FB8",
-		"quickInput.background": "#F8F8F8",
-		"quickInput.foreground": "#3B3B3B",
-		"searchEditor.textInputBorder": "#CECECE",
-		"settings.dropdownBackground": "#FFFFFF",
-		"settings.dropdownBorder": "#CECECE",
-		"settings.headerForeground": "#1F1F1F",
-		"settings.modifiedItemIndicator": "#BB800966",
-		"settings.numberInputBorder": "#CECECE",
-		"settings.textInputBorder": "#CECECE",
-		"sideBar.background": "#F8F8F8",
-		"sideBar.border": "#E5E5E5",
-		"sideBar.foreground": "#3B3B3B",
-		"sideBarSectionHeader.background": "#F8F8F8",
-		"sideBarSectionHeader.border": "#E5E5E5",
-		"sideBarSectionHeader.foreground": "#3B3B3B",
-		"sideBarTitle.foreground": "#3B3B3B",
-		"statusBar.background": "#F8F8F8",
-		"statusBar.foreground": "#3B3B3B",
-		"statusBar.border": "#E5E5E5",
-		"statusBar.debuggingBackground": "#FD716C",
-		"statusBar.debuggingForeground": "#000000",
-		"statusBar.focusBorder": "#005FB8",
-		"statusBar.noFolderBackground": "#F8F8F8",
-		"statusBarItem.errorBackground": "#C72E0F",
-		"statusBarItem.focusBorder": "#005FB8",
-		"statusBarItem.prominentBackground": "#6E768166",
-		"statusBarItem.remoteBackground": "#005FB8",
-		"statusBarItem.remoteForeground": "#FFFFFF",
-		"tab.activeBackground": "#FFFFFF",
-		"tab.activeBorder": "#F8F8F8",
-		"tab.activeBorderTop": "#005FB8",
-		"tab.activeForeground": "#3B3B3B",
-		"tab.border": "#E5E5E5",
-		"tab.hoverBackground": "#FFFFFF",
-		"tab.inactiveBackground": "#F8F8F8",
-		"tab.inactiveForeground": "#868686",
-		"tab.lastPinnedBorder": "#D4D4D4",
-		"tab.unfocusedActiveBorder": "#F8F8F8",
-		"tab.unfocusedActiveBorderTop": "#E5E5E5",
-		"tab.unfocusedHoverBackground": "#F8F8F8",
-		"terminalCursor.foreground": "#005FB8",
-		"terminal.foreground": "#3B3B3B",
-		"terminal.inactiveSelectionBackground": "#E5EBF1",
-		"terminal.tab.activeBorder": "#005FB8",
-		"textBlockQuote.background": "#F8F8F8",
-		"textBlockQuote.border": "#E5E5E5",
-		"textCodeBlock.background": "#F8F8F8",
-		"textLink.activeForeground": "#005FB8",
-		"textLink.foreground": "#005FB8",
-		"textPreformat.foreground": "#3B3B3B",
-		"textPreformat.background": "#0000001F",
-		"textSeparator.foreground": "#21262D",
-		"titleBar.activeBackground": "#F8F8F8",
-		"titleBar.activeForeground": "#1E1E1E",
-		"titleBar.border": "#E5E5E5",
-		"titleBar.inactiveBackground": "#F8F8F8",
-		"titleBar.inactiveForeground": "#8B949E",
-		"welcomePage.tileBackground": "#F3F3F3",
-		"widget.border": "#E5E5E5"
+		"activityBar.activeBorder": "#005FB8", // 活动栏活动边框颜色
+		"activityBar.background": "#F8F8F8", // 活动栏背景颜色
+		"activityBar.border": "#E5E5E5", // 活动栏边框颜色
+		"activityBar.foreground": "#1F1F1F", // 活动栏前景颜色
+		"activityBar.inactiveForeground": "#616161", // 活动栏非活动前景颜色
+		"activityBarBadge.background": "#005FB8", // 活动栏徽章背景颜色
+		"activityBarBadge.foreground": "#FFFFFF", // 活动栏徽章前景颜色
+		"badge.background": "#CCCCCC", // 徽章背景颜色
+		"badge.foreground": "#3B3B3B", // 徽章前景颜色
+		"button.background": "#005FB8", // 按钮背景颜色
+		"button.border": "#0000001a", // 按钮边框颜色
+		"button.foreground": "#FFFFFF", // 按钮前景颜色
+		"button.hoverBackground": "#0258A8", // 按钮悬停背景颜色
+		"button.secondaryBackground": "#E5E5E5", // 按钮次要背景颜色
+		"button.secondaryForeground": "#3B3B3B", // 按钮次要前景颜色
+		"button.secondaryHoverBackground": "#CCCCCC", // 按钮次要悬停背景颜色
+		"chat.slashCommandBackground": "#D2ECFF", // 聊天斜杠命令背景颜色
+		"chat.slashCommandForeground": "#306CA2", // 聊天斜杠命令前景颜色
+		"checkbox.background": "#F8F8F8", // 复选框背景颜色
+		"checkbox.border": "#CECECE", // 复选框边框颜色
+		"descriptionForeground": "#3B3B3B", // 描述前景颜色
+		"dropdown.background": "#FFFFFF", // 下拉菜单背景颜色
+		"dropdown.border": "#CECECE", // 下拉菜单边框颜色
+		"dropdown.foreground": "#3B3B3B", // 下拉菜单前景颜色
+		"dropdown.listBackground": "#FFFFFF", // 下拉菜单列表背景颜色
+		"editor.background": "#FFFFFF", // 编辑器背景颜色
+		"editor.foreground": "#3B3B3B", // 编辑器前景颜色
+		"editor.inactiveSelectionBackground": "#E5EBF1", // 编辑器非活动选择背景颜色
+		"editor.selectionHighlightBackground": "#ADD6FF80", // 编辑器选择高亮背景颜色
+		"editorGroup.border": "#E5E5E5", // 编辑器组边框颜色
+		"editorGroupHeader.tabsBackground": "#F8F8F8", // 编辑器组头部标签背景颜色
+		"editorGroupHeader.tabsBorder": "#E5E5E5", // 编辑器组头部标签边框颜色
+		"editorGutter.addedBackground": "#2EA043", // 编辑器边距添加背景颜色
+		"editorGutter.deletedBackground": "#F85149", // 编辑器边距删除背景颜色
+		"editorGutter.modifiedBackground": "#005FB8", // 编辑器边距修改背景颜色
+		"editorIndentGuide.background1": "#D3D3D3", // 编辑器缩进指南背景颜色
+		"editorLineNumber.activeForeground": "#171184", // 编辑器行号活动前景颜色
+		"editorLineNumber.foreground": "#6E7681", // 编辑器行号前景颜色
+		"editorOverviewRuler.border": "#E5E5E5", // 编辑器概览标尺边框颜色
+		"editorSuggestWidget.background": "#F8F8F8", // 编辑器建议小部件背景颜色
+		"editorWidget.background": "#F8F8F8", // 编辑器小部件背景颜色
+		"errorForeground": "#F85149", // 错误前景颜色
+		"focusBorder": "#005FB8", // 焦点边框颜色
+		"foreground": "#3B3B3B", // 前景颜色
+		"icon.foreground": "#3B3B3B", // 图标前景颜色
+		"input.background": "#FFFFFF", // 输入背景颜色
+		"input.border": "#CECECE", // 输入边框颜色
+		"input.foreground": "#3B3B3B", // 输入前景颜色
+		"input.placeholderForeground": "#767676", // 输入占位符前景颜色
+		"inputOption.activeBackground": "#BED6ED", // 输入选项活动背景颜色
+		"inputOption.activeBorder": "#005FB8", // 输入选项活动边框颜色
+		"inputOption.activeForeground": "#000000", // 输入选项活动前景颜色
+		"keybindingLabel.foreground": "#3B3B3B", // 键绑定标签前景颜色
+		"list.activeSelectionBackground": "#E8E8E8", // 列表活动选择背景颜色
+		"list.activeSelectionForeground": "#000000", // 列表活动选择前景颜色
+		"list.activeSelectionIconForeground": "#000000", // 列表活动选择图标前景颜色
+		"list.hoverBackground": "#F2F2F2", // 列表悬停背景颜色
+		"list.focusAndSelectionOutline": "#005FB8", // 列表焦点和选择轮廓颜色
+		"menu.border": "#CECECE", // 菜单边框颜色
+		"notebook.cellBorderColor": "#E5E5E5", // 笔记本单元格边框颜色
+		"notebook.selectedCellBackground": "#C8DDF150", // 笔记本选定单元格背景颜色
+		"notificationCenterHeader.background": "#FFFFFF", // 通知中心头部背景颜色
+		"notificationCenterHeader.foreground": "#3B3B3B", // 通知中心头部前景颜色
+		"notifications.background": "#FFFFFF", // 通知背景颜色
+		"notifications.border": "#E5E5E5", // 通知边框颜色
+		"notifications.foreground": "#3B3B3B", // 通知前景颜色
+		"panel.background": "#F8F8F8", // 面板背景颜色
+		"panel.border": "#E5E5E5", // 面板边框颜色
+		"panelInput.border": "#E5E5E5", // 面板输入边框颜色
+		"panelTitle.activeBorder": "#005FB8", // 面板标题活动边框颜色
+		"panelTitle.activeForeground": "#3B3B3B", // 面板标题活动前景颜色
+		"panelTitle.inactiveForeground": "#3B3B3B", // 面板标题非活动前景颜色
+		"peekViewEditor.matchHighlightBackground": "#BB800966", // 预览视图编辑器匹配高亮背景颜色
+		"peekViewResult.background": "#FFFFFF", // 预览视图结果背景颜色
+		"peekViewResult.matchHighlightBackground": "#BB800966", // 预览视图结果匹配高亮背景颜色
+		"pickerGroup.border": "#E5E5E5", // 选择器组边框颜色
+		"pickerGroup.foreground": "#8B949E", // 选择器组前景颜色
+		"ports.iconRunningProcessForeground": "#369432", // 端口图标运行进程前景颜色
+		"progressBar.background": "#005FB8", // 进度条背景颜色
+		"quickInput.background": "#F8F8F8", // 快速输入背景颜色
+		"quickInput.foreground": "#3B3B3B", // 快速输入前景颜色
+		"searchEditor.textInputBorder": "#CECECE", // 搜索编辑器文本输入边框颜色
+		"settings.dropdownBackground": "#FFFFFF", // 设置下拉菜单背景颜色
+		"settings.dropdownBorder": "#CECECE", // 设置下拉菜单边框颜色
+		"settings.headerForeground": "#1F1F1F", // 设置头部前景颜色
+		"settings.modifiedItemIndicator": "#BB800966", // 设置修改项指示器颜色
+		"settings.numberInputBorder": "#CECECE", // 设置数字输入边框颜色
+		"settings.textInputBorder": "#CECECE", // 设置文本输入边框颜色
+		"sideBar.background": "#F8F8F8", // 侧边栏背景颜色
+		"sideBar.border": "#E5E5E5", // 侧边栏边框颜色
+		"sideBar.foreground": "#3B3B3B", // 侧边栏前景颜色
+		"sideBarSectionHeader.background": "#F8F8F8", // 侧边栏部分头部背景颜色
+		"sideBarSectionHeader.border": "#E5E5E5", // 侧边栏部分头部边框颜色
+		"sideBarSectionHeader.foreground": "#3B3B3B", // 侧边栏部分头部前景颜色
+		"sideBarTitle.foreground": "#3B3B3B", // 侧边栏标题前景颜色
+		"statusBar.background": "#F8F8F8", // 状态栏背景颜色
+		"statusBar.foreground": "#3B3B3B", // 状态栏前景颜色
+		"statusBar.border": "#E5E5E5", // 状态栏边框颜色
+		"statusBar.debuggingBackground": "#FD716C", // 状态栏调试背景颜色
+		"statusBar.debuggingForeground": "#000000", // 状态栏调试前景颜色
+		"statusBar.focusBorder": "#005FB8", // 状态栏焦点边框颜色
+		"statusBar.noFolderBackground": "#F8F8F8", // 状态栏无文件夹背景颜色
+		"statusBarItem.errorBackground": "#C72E0F", // 状态栏项错误背景颜色
+		"statusBarItem.focusBorder": "#005FB8", // 状态栏项焦点边框颜色
+		"statusBarItem.prominentBackground": "#6E768166", // 状态栏项突出背景颜色
+		"statusBarItem.remoteBackground": "#005FB8", // 状态栏项远程背景颜色
+		"statusBarItem.remoteForeground": "#FFFFFF", // 状态栏项远程前景颜色
+		"tab.activeBackground": "#FFFFFF", // 标签活动背景颜色
+		"tab.activeBorder": "#F8F8F8", // 标签活动边框颜色
+		"tab.activeBorderTop": "#005FB8", // 标签活动顶部边框颜色
+		"tab.activeForeground": "#3B3B3B", // 标签活动前景颜色
+		"tab.border": "#E5E5E5", // 标签边框颜色
+		"tab.hoverBackground": "#FFFFFF", // 标签悬停背景颜色
+		"tab.inactiveBackground": "#F8F8F8", // 标签非活动背景颜色
+		"tab.inactiveForeground": "#868686", // 标签非活动前景颜色
+		"tab.lastPinnedBorder": "#D4D4D4", // 标签最后固定边框颜色
+		"tab.unfocusedActiveBorder": "#F8F8F8", // 标签未聚焦活动边框颜色
+		"tab.unfocusedActiveBorderTop": "#E5E5E5", // 标签未聚焦活动顶部边框颜色
+		"tab.unfocusedHoverBackground": "#F8F8F8", // 标签未聚焦悬停背景颜色
+		"terminalCursor.foreground": "#005FB8", // 终端光标前景颜色
+		"terminal.foreground": "#3B3B3B", // 终端前景颜色
+		"terminal.inactiveSelectionBackground": "#E5EBF1", // 终端非活动选择背景颜色
+		"terminal.tab.activeBorder": "#005FB8", // 终端标签活动边框颜色
+		"textBlockQuote.background": "#F8F8F8", // 文本块引用背景颜色
+		"textBlockQuote.border": "#E5E5E5", // 文本块引用边框颜色
+		"textCodeBlock.background": "#F8F8F8", // 文本代码块背景颜色
+		"textLink.activeForeground": "#005FB8", // 文本链接活动前景颜色
+		"textLink.foreground": "#005FB8", // 文本链接前景颜色
+		"textPreformat.foreground": "#3B3B3B", // 文本预格式化前景颜色
+		"textPreformat.background": "#0000001F", // 文本预格式化背景颜色
+		"textSeparator.foreground": "#21262D", // 文本分隔符前景颜色
+		"titleBar.activeBackground": "#F8F8F8", // 标题栏活动背景颜色
+		"titleBar.activeForeground": "#1E1E1E", // 标题栏活动前景颜色
+		"titleBar.border": "#E5E5E5", // 标题栏边框颜色
+		"titleBar.inactiveBackground": "#F8F8F8", // 标题栏非活动背景颜色
+		"titleBar.inactiveForeground": "#8B949E", // 标题栏非活动前景颜色
+		"welcomePage.tileBackground": "#F3F3F3", // 欢迎页面磁贴背景颜色
+		"widget.border": "#E5E5E5" // 小部件边框颜色
 	}
 }

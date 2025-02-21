@@ -1,41 +1,41 @@
 {
-	"$schema": "vscode://schemas/color-theme",
-	"name": "Light High Contrast",
+	"$schema": "vscode://schemas/color-theme", // 颜色主题的模式
+	"name": "Light High Contrast", // 主题名称
 	"tokenColors": [
 		{
-			"scope": ["meta.embedded", "source.groovy.embedded", "variable.legacy.builtin.python"],
+			"scope": ["meta.embedded", "source.groovy.embedded", "variable.legacy.builtin.python"], // 作用域
 			"settings": {
-				"foreground": "#292929"
+				"foreground": "#292929" // 前景颜色
 			}
 		},
 		{
-			"scope": "emphasis",
+			"scope": "emphasis", // 作用域
 			"settings": {
-				"fontStyle": "italic"
+				"fontStyle": "italic" // 字体样式
 			}
 		},
 		{
-			"scope": "strong",
+			"scope": "strong", // 作用域
 			"settings": {
-				"fontStyle": "bold"
+				"fontStyle": "bold" // 字体样式
 			}
 		},
 		{
-			"scope": "meta.diff.header",
+			"scope": "meta.diff.header", // 作用域
 			"settings": {
-				"foreground": "#062F4A"
+				"foreground": "#062F4A" // 前景颜色
 			}
 		},
 		{
-			"scope": "comment",
+			"scope": "comment", // 作用域
 			"settings": {
-				"foreground": "#515151"
+				"foreground": "#515151" // 前景颜色
 			}
 		},
 		{
-			"scope": "constant.language",
+			"scope": "constant.language", // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
@@ -44,33 +44,33 @@
 				"variable.other.enummember",
 				"keyword.operator.plus.exponent",
 				"keyword.operator.minus.exponent"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#096d48"
+				"foreground": "#096d48" // 前景颜色
 			}
 		},
 		{
-			"scope": "constant.regexp",
+			"scope": "constant.regexp", // 作用域
 			"settings": {
-				"foreground": "#811F3F"
+				"foreground": "#811F3F" // 前景颜色
 			}
 		},
 		{
-			"scope": "entity.name.tag",
+			"scope": "entity.name.tag", // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": "entity.name.selector",
+			"scope": "entity.name.selector", // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": "entity.other.attribute-name",
+			"scope": "entity.other.attribute-name", // 作用域
 			"settings": {
-				"foreground": "#264F78"
+				"foreground": "#264F78" // 前景颜色
 			}
 		},
 		{
@@ -84,131 +84,131 @@
 				"entity.other.attribute-name.pseudo-element.css",
 				"source.css.less entity.other.attribute-name.id",
 				"entity.other.attribute-name.scss"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": "invalid",
+			"scope": "invalid", // 作用域
 			"settings": {
-				"foreground": "#B5200D"
+				"foreground": "#B5200D" // 前景颜色
 			}
 		},
 		{
-			"scope": "markup.underline",
+			"scope": "markup.underline", // 作用域
 			"settings": {
-				"fontStyle": "underline"
+				"fontStyle": "underline" // 字体样式
 			}
 		},
 		{
-			"scope": "markup.bold",
+			"scope": "markup.bold", // 作用域
 			"settings": {
-				"foreground": "#000080",
-				"fontStyle": "bold"
+				"foreground": "#000080", // 前景颜色
+				"fontStyle": "bold" // 字体样式
 			}
 		},
 		{
-			"scope": "markup.heading",
+			"scope": "markup.heading", // 作用域
 			"settings": {
-				"foreground": "#0F4A85",
-				"fontStyle": "bold"
+				"foreground": "#0F4A85", // 前景颜色
+				"fontStyle": "bold" // 字体样式
 			}
 		},
 		{
-			"scope": "markup.italic",
+			"scope": "markup.italic", // 作用域
 			"settings": {
-				"fontStyle": "italic"
+				"fontStyle": "italic" // 字体样式
 			}
 		},
 		{
-			"scope": "markup.strikethrough",
+			"scope": "markup.strikethrough", // 作用域
 			"settings": {
-				"fontStyle": "strikethrough"
+				"fontStyle": "strikethrough" // 字体样式
 			}
 		},
 		{
-			"scope": "markup.inserted",
+			"scope": "markup.inserted", // 作用域
 			"settings": {
-				"foreground": "#096d48"
+				"foreground": "#096d48" // 前景颜色
 			}
 		},
 		{
-			"scope": "markup.deleted",
+			"scope": "markup.deleted", // 作用域
 			"settings": {
-				"foreground": "#5A5A5A"
+				"foreground": "#5A5A5A" // 前景颜色
 			}
 		},
 		{
-			"scope": "markup.changed",
+			"scope": "markup.changed", // 作用域
 			"settings": {
-				"foreground": "#0451A5"
+				"foreground": "#0451A5" // 前景颜色
 			}
 		},
 		{
-			"scope": ["punctuation.definition.quote.begin.markdown", "punctuation.definition.list.begin.markdown"],
+			"scope": ["punctuation.definition.quote.begin.markdown", "punctuation.definition.list.begin.markdown"], // 作用域
 			"settings": {
-				"foreground": "#0451A5"
+				"foreground": "#0451A5" // 前景颜色
 			}
 		},
 		{
-			"scope": "markup.inline.raw",
+			"scope": "markup.inline.raw", // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": "punctuation.definition.tag",
+			"scope": "punctuation.definition.tag", // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": ["meta.preprocessor", "entity.name.function.preprocessor"],
+			"scope": ["meta.preprocessor", "entity.name.function.preprocessor"], // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": "meta.preprocessor.string",
+			"scope": "meta.preprocessor.string", // 作用域
 			"settings": {
-				"foreground": "#b5200d"
+				"foreground": "#b5200d" // 前景颜色
 			}
 		},
 		{
-			"scope": "meta.preprocessor.numeric",
+			"scope": "meta.preprocessor.numeric", // 作用域
 			"settings": {
-				"foreground": "#096d48"
+				"foreground": "#096d48" // 前景颜色
 			}
 		},
 		{
-			"scope": "meta.structure.dictionary.key.python",
+			"scope": "meta.structure.dictionary.key.python", // 作用域
 			"settings": {
-				"foreground": "#0451A5"
+				"foreground": "#0451A5" // 前景颜色
 			}
 		},
 		{
-			"scope": "storage",
+			"scope": "storage", // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": "storage.type",
+			"scope": "storage.type", // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": ["storage.modifier", "keyword.operator.noexcept"],
+			"scope": ["storage.modifier", "keyword.operator.noexcept"], // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": ["string", "meta.embedded.assembly"],
+			"scope": ["string", "meta.embedded.assembly"], // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
@@ -228,15 +228,15 @@
 				"string.unquoted.html",
 				"string.quoted.single.handlebars",
 				"string.quoted.double.handlebars"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": "string.regexp",
+			"scope": "string.regexp", // 作用域
 			"settings": {
-				"foreground": "#811F3F"
+				"foreground": "#811F3F" // 前景颜色
 			}
 		},
 		{
@@ -244,15 +244,15 @@
 				"punctuation.definition.template-expression.begin",
 				"punctuation.definition.template-expression.end",
 				"punctuation.section.embedded"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": ["meta.template.expression"],
+			"scope": ["meta.template.expression"], // 作用域
 			"settings": {
-				"foreground": "#000000"
+				"foreground": "#000000" // 前景颜色
 			}
 		},
 		{
@@ -264,9 +264,9 @@
 				"constant.other.color.rgb-value",
 				"constant.other.rgb-value",
 				"support.constant.color"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#0451A5"
+				"foreground": "#0451A5" // 前景颜色
 			}
 		},
 		{
@@ -275,33 +275,33 @@
 				"support.type.property-name",
 				"source.css variable",
 				"source.coffee.embedded"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#264F78"
+				"foreground": "#264F78" // 前景颜色
 			}
 		},
 		{
-			"scope": ["support.type.property-name.json"],
+			"scope": ["support.type.property-name.json"], // 作用域
 			"settings": {
-				"foreground": "#0451A5"
+				"foreground": "#0451A5" // 前景颜色
 			}
 		},
 		{
-			"scope": "keyword",
+			"scope": "keyword", // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": "keyword.control",
+			"scope": "keyword.control", // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": "keyword.operator",
+			"scope": "keyword.operator", // 作用域
 			"settings": {
-				"foreground": "#000000"
+				"foreground": "#000000" // 前景颜色
 			}
 		},
 		{
@@ -316,33 +316,33 @@
 				"keyword.operator.instanceof",
 				"keyword.operator.logical.python",
 				"keyword.operator.wordlike"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": "keyword.other.unit",
+			"scope": "keyword.other.unit", // 作用域
 			"settings": {
-				"foreground": "#096d48"
+				"foreground": "#096d48" // 前景颜色
 			}
 		},
 		{
-			"scope": ["punctuation.section.embedded.begin.php", "punctuation.section.embedded.end.php"],
+			"scope": ["punctuation.section.embedded.begin.php", "punctuation.section.embedded.end.php"], // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": "support.function.git-rebase",
+			"scope": "support.function.git-rebase", // 作用域
 			"settings": {
-				"foreground": "#0451A5"
+				"foreground": "#0451A5" // 前景颜色
 			}
 		},
 		{
-			"scope": "constant.sha.git-rebase",
+			"scope": "constant.sha.git-rebase", // 作用域
 			"settings": {
-				"foreground": "#096d48"
+				"foreground": "#096d48" // 前景颜色
 			}
 		},
 		{
@@ -350,15 +350,15 @@
 				"storage.modifier.import.java",
 				"variable.language.wildcard.java",
 				"storage.modifier.package.java"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#000000"
+				"foreground": "#000000" // 前景颜色
 			}
 		},
 		{
-			"scope": "variable.language",
+			"scope": "variable.language", // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
@@ -368,9 +368,9 @@
 				"support.constant.handlebars",
 				"source.powershell variable.other.member",
 				"entity.name.operator.custom-literal"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#5e2cbc"
+				"foreground": "#5e2cbc" // 前景颜色
 			}
 		},
 		{
@@ -407,9 +407,9 @@
 				"storage.type.object.array.groovy",
 				"storage.type.primitive.array.groovy",
 				"storage.type.primitive.groovy"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#185E73"
+				"foreground": "#185E73" // 前景颜色
 			}
 		},
 		{
@@ -420,9 +420,9 @@
 				"support.constant.dom",
 				"support.constant.json",
 				"entity.other.inherited-class"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#185E73"
+				"foreground": "#185E73" // 前景颜色
 			}
 		},
 		{
@@ -434,9 +434,9 @@
 				"keyword.other.directive.using",
 				"keyword.other.operator",
 				"entity.name.operator"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#b5200d"
+				"foreground": "#b5200d" // 前景颜色
 			}
 		},
 		{
@@ -446,21 +446,21 @@
 				"support.variable",
 				"entity.name.variable",
 				"constant.other.placeholder"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#001080"
+				"foreground": "#001080" // 前景颜色
 			}
 		},
 		{
-			"scope": ["variable.other.constant", "variable.other.enummember"],
+			"scope": ["variable.other.constant", "variable.other.enummember"], // 作用域
 			"settings": {
-				"foreground": "#02715D"
+				"foreground": "#02715D" // 前景颜色
 			}
 		},
 		{
-			"scope": ["meta.object-literal.key"],
+			"scope": ["meta.object-literal.key"], // 作用域
 			"settings": {
-				"foreground": "#001080"
+				"foreground": "#001080" // 前景颜色
 			}
 		},
 		{
@@ -472,9 +472,9 @@
 				"constant.other.color.rgb-value",
 				"constant.other.rgb-value",
 				"support.constant.color"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#0451A5"
+				"foreground": "#0451A5" // 前景颜色
 			}
 		},
 		{
@@ -486,9 +486,9 @@
 				"punctuation.character.set.end.regexp",
 				"keyword.operator.negation.regexp",
 				"support.other.parenthesis.regexp"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#D16969"
+				"foreground": "#D16969" // 前景颜色
 			}
 		},
 		{
@@ -497,67 +497,67 @@
 				"constant.other.character-class.set.regexp",
 				"constant.other.character-class.regexp",
 				"constant.character.set.regexp"
-			],
+			], // 作用域
 			"settings": {
-				"foreground": "#811F3F"
+				"foreground": "#811F3F" // 前景颜色
 			}
 		},
 		{
-			"scope": "keyword.operator.quantifier.regexp",
+			"scope": "keyword.operator.quantifier.regexp", // 作用域
 			"settings": {
-				"foreground": "#000000"
+				"foreground": "#000000" // 前景颜色
 			}
 		},
 		{
-			"scope": ["keyword.operator.or.regexp", "keyword.control.anchor.regexp"],
+			"scope": ["keyword.operator.or.regexp", "keyword.control.anchor.regexp"], // 作用域
 			"settings": {
-				"foreground": "#EE0000"
+				"foreground": "#EE0000" // 前景颜色
 			}
 		},
 		{
-			"scope": "constant.character",
+			"scope": "constant.character", // 作用域
 			"settings": {
-				"foreground": "#0F4A85"
+				"foreground": "#0F4A85" // 前景颜色
 			}
 		},
 		{
-			"scope": "constant.character.escape",
+			"scope": "constant.character.escape", // 作用域
 			"settings": {
-				"foreground": "#EE0000"
+				"foreground": "#EE0000" // 前景颜色
 			}
 		},
 		{
-			"scope": "entity.name.label",
+			"scope": "entity.name.label", // 作用域
 			"settings": {
-				"foreground": "#000000"
+				"foreground": "#000000" // 前景颜色
 			}
 		},
 		{
-			"scope": "token.info-token",
+			"scope": "token.info-token", // 作用域
 			"settings": {
-				"foreground": "#316BCD"
+				"foreground": "#316BCD" // 前景颜色
 			}
 		},
 		{
-			"scope": "token.warn-token",
+			"scope": "token.warn-token", // 作用域
 			"settings": {
-				"foreground": "#CD9731"
+				"foreground": "#CD9731" // 前景颜色
 			}
 		},
 		{
-			"scope": "token.error-token",
+			"scope": "token.error-token", // 作用域
 			"settings": {
-				"foreground": "#CD3131"
+				"foreground": "#CD3131" // 前景颜色
 			}
 		},
 		{
-			"scope": "token.debug-token",
+			"scope": "token.debug-token", // 作用域
 			"settings": {
-				"foreground": "#800080"
+				"foreground": "#800080" // 前景颜色
 			}
 		}
 	],
 	"colors": {
-		"actionBar.toggledBackground": "#dddddd"
+		"actionBar.toggledBackground": "#dddddd" // 操作栏切换背景颜色
 	}
 }

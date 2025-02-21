@@ -1,14 +1,14 @@
 import { ClineMessage } from "./ExtensionMessage"
 
 /**
- * Combines API request start and finish messages in an array of ClineMessages.
+ * 将 API 请求开始和结束消息组合在一起。
  *
- * This function looks for pairs of 'api_req_started' and 'api_req_finished' messages.
- * When it finds a pair, it combines them into a single 'api_req_combined' message.
- * The JSON data in the text fields of both messages are merged.
+ * 该函数查找 'api_req_started' 和 'api_req_finished' 消息对。
+ * 当找到一对时，它将它们组合成一条 'api_req_combined' 消息。
+ * 合并两条消息文本字段中的 JSON 数据。
  *
- * @param messages - An array of ClineMessage objects to process.
- * @returns A new array of ClineMessage objects with API requests combined.
+ * @param messages - 要处理的 ClineMessage 对象数组。
+ * @returns 一个新的 ClineMessage 对象数组，组合了 API 请求。
  *
  * @example
  * const messages = [
@@ -16,7 +16,7 @@ import { ClineMessage } from "./ExtensionMessage"
  *   { type: "say", say: "api_req_finished", text: '{"cost":0.005}', ts: 1001 }
  * ];
  * const result = combineApiRequests(messages);
- * // Result: [{ type: "say", say: "api_req_started", text: '{"request":"GET /api/data","cost":0.005}', ts: 1000 }]
+ * // 结果: [{ type: "say", say: "api_req_started", text: '{"request":"GET /api/data","cost":0.005}', ts: 1000 }]
  */
 export function combineApiRequests(messages: ClineMessage[]): ClineMessage[] {
 	const combinedApiRequests: ClineMessage[] = []
@@ -36,20 +36,20 @@ export function combineApiRequests(messages: ClineMessage[]): ClineMessage[] {
 						text: JSON.stringify(combinedRequest),
 					})
 
-					i = j // Skip to the api_req_finished message
+					i = j // 跳到 api_req_finished 消息
 					break
 				}
 				j++
 			}
 
 			if (j === messages.length) {
-				// If no matching api_req_finished found, keep the original api_req_started
+				// 如果没有找到匹配的 api_req_finished，保留原始的 api_req_started
 				combinedApiRequests.push(messages[i])
 			}
 		}
 	}
 
-	// Replace original api_req_started and remove api_req_finished
+	// 替换原始的 api_req_started 并删除 api_req_finished
 	return messages
 		.filter((msg) => !(msg.type === "say" && msg.say === "api_req_finished"))
 		.map((msg) => {
